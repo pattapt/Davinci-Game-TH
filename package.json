@@ -38,8 +38,9 @@
     "nodemon": "^2.0.20",
     "package.json": "^0.0.0",
     "path": "^0.12.7",
-    "request": "0.0.1",
+    "request": "^2.88.2",
     "request-promise": "^0.0.1",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "ws": "^8.13.0"
   }
 }
