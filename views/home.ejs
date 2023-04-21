@@ -36,20 +36,30 @@
 <body class="davinci-game">
     <div class="background"></div>
     <%- include('src/navbar') %>
-    <div class="flex" style="min-height: 100vh;">
+    <div class="flex start">
         <header>
             <div class="logo mt-2 mb-2">
-                <img src="/public/images/gartic.svg">
+                <img src="/public/images/logo-v1.png" style="width: 200px">
                 <h3>JUST GUESS AND WIN</h3>
             </div>
         </header>
-        <div class="card tutorial-card mx-auto">
-            <div class="card-body">
-                <div class="stepper">
-                    <h2 class="card-title text-center">ยินดีต้อนรับเข้าสู่<br>Davinci Game</h2>
-                    <p class="card-text">เกมทายคำจากภาพสุดกวน ที่จะพาคุณไปสร้างทั้งความงุนงง และความสงสัย ว่ามันเอาอะไรมาให้ทายวะเนี่ย?? ถ้าพร้อมแล้ว ก็ไปเริ่มกันเลย อย่ารอช้าอยู่ใย ไปกั๊น!!🚀🚀</p>
+        <div class="card play-card mx-auto">
+            <div class="title"><span class="gTitle"><h2>เล่นเลย!</h2></span></div>
+            <div class="content">
+                <div class="info">
+                    <div class="form-group">
+                        <label for="username" class="input-label">ชื่อผู้เล่น</label>
+                        <input type="email" class="form-control" id="username" placeholder="ระบุชื่อผู้เล่น">
+                    </div>
+                    <div class="form-group">
+                        <label for="room_id" class="input-label">ID ห้อง</label>
+                        <input type="text" class="form-control" id="room_id" placeholder="ID ห้อง">
+                    </div>
                 </div>
-              <a href="#" class="btn btn-primary next-btn">ไปกั๊น 🚀🚀</a>
+                <div class="actions">
+                    <button class="btYellowBig ic-playHome"><strong>เล่น!</strong></button>
+                    <a class="btBlueBig ic-rooms" href="/create"><strong>เปิดตี๊</strong></a>
+                </div>
             </div>
         </div>
         <footer>
