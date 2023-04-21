@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!--required meta tags-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--meta-->
+    <link rel="icon" href="<%- main_site.favicon %>" type="image/png" sizes="16x16">
+    <title><%- main_site.title %></title>
+    <meta name="description" content="<%- main_site.description %>">
+    <meta name="author" content="<%- main_site.author %>">
+
+    <!--twitter og-->
+    <meta name="twitter:site" content="@<%- main_site.author %>">
+    <meta name="twitter:creator" content="@<%- main_site.author %>">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<%- main_site.title %>">
+    <meta name="twitter:description" content="<%- main_site.description %>">
+    <meta name="twitter:image" content="#">
+
+    <!--facebook og-->
+    <meta property="og:url" content="#">
+    <meta name="twitter:title" content="<%- main_site.title %>">
+    <meta property="og:description" content="<%- main_site.description %>">
+    <meta property="og:image" content="#">
+    <meta property="og:image:secure_url" content="#">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="600">
+
+    <%- include('src/header') %>
+</head>
+
+<body class="davinci-game">
+    <div class="background"></div>
+    <%- include('src/navbar') %>
+    <div class="flex" style="min-height: 100vh;">
+        <header>
+            <div class="logo mt-2 mb-2">
+                <img src="/public/images/gartic.svg">
+                <h3>JUST GUESS AND WIN</h3>
+            </div>
+        </header>
+        <div class="card tutorial-card mx-auto">
+            <div class="card-body">
+                <div class="stepper">
+                    <h2 class="card-title text-center">ยินดีต้อนรับเข้าสู่<br>Davinci Game</h2>
+                    <p class="card-text">เกมทายคำจากภาพสุดกวน ที่จะพาคุณไปสร้างทั้งความงุนงง และความสงสัย ว่ามันเอาอะไรมาให้ทายวะเนี่ย?? ถ้าพร้อมแล้ว ก็ไปเริ่มกันเลย อย่ารอช้าอยู่ใย ไปกั๊น!!🚀🚀</p>
+                </div>
+              <a href="#" class="btn btn-primary next-btn">ไปกั๊น 🚀🚀</a>
+            </div>
+        </div>
+        <footer>
+            <p>Made by Ctrl C + Ctrl V in my computer</p>
+        </footer>
+    </div>
+    <%- include('src/script') %>
+
+</body>
+
+</html>

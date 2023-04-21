@@ -1,0 +1,45 @@
+{
+  "name": "cpe221-davinci-game-th",
+  "version": "1.0.0",
+  "description": "Davinci game th version",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./bin/www"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pattapt/Davinci-Game-TH.git"
+  },
+  "keywords": [
+    "davinci",
+    "game"
+  ],
+  "author": "patta, pokdeng",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pattapt/Davinci-Game-TH/issues"
+  },
+  "homepage": "https://github.com/pattapt/Davinci-Game-TH#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.11.0",
+    "cookie-parser": "^1.4.6",
+    "cookie-session": "^2.0.0",
+    "deep-email-validator": "^0.1.21",
+    "dotenv": "^16.0.3",
+    "ejs": "^3.1.8",
+    "express": "^4.18.2",
+    "helmet": "^6.0.1",
+    "http": "^0.0.1-security",
+    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.40",
+    "mongoose": "^6.8.1",
+    "nodemon": "^2.0.20",
+    "package.json": "^0.0.0",
+    "path": "^0.12.7",
+    "request": "0.0.1",
+    "request-promise": "^0.0.1",
+    "uuid": "^9.0.0"
+  }
+}
