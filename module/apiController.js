@@ -12,7 +12,7 @@ let isObject = function(a) {
 };
 const BoardCast = (Req, Res, next) => {
     const channels = Req.app.get('channels');
-    const channelName = Req.body.channel;
+    const GameID = Req.body.channel;
     const OriginalMessage = Req.body.message
     if(isArray(OriginalMessage) || isObject(OriginalMessage)){
         var message = JSON.stringify(OriginalMessage)
@@ -21,25 +21,28 @@ const BoardCast = (Req, Res, next) => {
     }
     
     const dateTime = moment().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss');
-    console.log(`Received message for channel "${channelName}" from API request`);
+    console.log(`Received message for channel "${GameID}" from API request`);
 
-    if(typeof channels[channelName] === 'undefined') {
+    if(typeof channels[GameID] === 'undefined') {
         // does not exist
         console.log("API request to channel that does not exist")
         Res.json({ error: "Channel does not exist" })
         return
     }
 
-    console.log(channels)
-
     // Broadcast the message to all clients in the channel
-    channels[channelName].players.forEach(function each(client) {
+    channels[GameID].players.forEach(function each(client) {
         if (client.socket.readyState === WebSocket.OPEN) {
-            client.socket.send(message);
+          client.socket.send(message);
         }
     });
+
+    if(channels[GameID].host !== undefined){
+        channels[GameID].host.socket.send(message);
+    }
+
     const MessageToken = uuidv4()
-    Res.json({ success: "Successfully Send Message to channel "+channelName, data: { message_token: MessageToken, message: OriginalMessage, dateTime: dateTime }})
+    Res.json({ success: "Successfully Send Message to channel "+GameID, data: { message_token: MessageToken, message: OriginalMessage, dateTime: dateTime }})
     return
     
 }

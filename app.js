@@ -6,6 +6,9 @@ const cookieSession = require('cookie-session');
 const ejs = require('ejs')
 const http = require('http');
 const WebSocket = require('ws');
+const { v1: uuidv1, v4: uuidv4 } = require('uuid')
+const url = require('url');
+const _ = require('lodash');
 
 
 // Import Config and Route
@@ -50,12 +53,21 @@ const channels = [];
 app.set('channels', channels)
 
 wss.on('connection', function connection(ws, req) {
+  console.log(req.url)
   const channel = req.url.substring(1);
   const Ch = channel.split("/")
   const Prefix = Ch[0];
-  const GameID = Ch[1];
+  let GameID = Ch[1];
+  GameID = GameID.split("?")[0]
   const ip = req.connection.remoteAddress;
   const SocketID = req.headers['sec-websocket-key'];
+
+  const parsedUrl = url.parse(req.url, true);
+  const queryObject = parsedUrl.query;
+  const params = new URLSearchParams(queryObject);
+  const type = params.get('type');
+  const name = params.get('name');
+  console.log(type, name)
 
   if(Prefix != "game"){
     ws.close();
@@ -66,8 +78,7 @@ wss.on('connection', function connection(ws, req) {
 
   if(typeof channels[GameID] === 'undefined') {
       channels[GameID] = {
-        "room_id": 000000,
-        "host": SocketID,
+        "room_id": Math.floor(Math.random() * 1000000).toString().padStart(6, '0'),
         "mode": "normal",
         "time": 60,
         "max_round": 10,
@@ -76,22 +87,55 @@ wss.on('connection', function connection(ws, req) {
         "players": []
       }
   }
-  channels[GameID].players.push({
-    "name": "TEST_PLAYER",
-    "id": SocketID,
-    "score": 0,
-    "socket": ws
-  });
-  app.set('channels', channels)
-  let Game = channels[GameID]
-  Game.players = Game.players.map(player => {
-    return {
-      name: player.name,
-      id: player.id,
-      score: player.score
-    };
-  });
-  ws.send(JSON.stringify(Game));
+  if(type !== undefined && type == "player"){
+    const PlayerData = {
+      "name": name,
+      "id": SocketID,
+      "token": uuidv4(),
+      "score": 0,
+      "socket": ws
+    }
+    channels[GameID].players.push(PlayerData);
+    app.set('channels', channels)
+    let Game = _.cloneDeep(channels[GameID]);
+    let You = _.cloneDeep(PlayerData);
+    delete You.socket
+    if(Game.host !== undefined){
+      delete Game.host.socket
+    }
+    Game.you = You
+    Game.players = Game.players.map(player => {
+      delete player.socket
+      return player;
+    });
+    ws.send(JSON.stringify(Game));
+    delete Game.you
+    channels[GameID].players.forEach(function each(client) {
+      if (client.socket.readyState === WebSocket.OPEN && client.socket != ws) {
+        client.socket.send(JSON.stringify(Game));
+      }
+    });
+    if(channels[GameID].host !== undefined){
+      Game.new_player = You
+      channels[GameID].host.socket.send(JSON.stringify(Game));
+    }
+  }
+
+  if(type !== undefined && type == "host" && channels[GameID].host == undefined){
+    channels[GameID].host = {
+      "token": uuidv4(),
+      "socket": ws
+    }
+    app.set('channels', channels)
+    let Game = _.cloneDeep(channels[GameID]);
+    delete Game.host.socket
+    Game.players = Game.players.map(player => {
+      delete player.socket
+      return player;
+    });
+    ws.send(JSON.stringify(Game));
+  }
+  
 
   // Listen for messages from the client
   // จริงๆต้องปิดนะ เอาไว้แค่เทสพอ พอจะใช้จริงให้ส่งผ่าน /Push
@@ -113,6 +157,9 @@ wss.on('connection', function connection(ws, req) {
     channels[GameID].players = channels[GameID].players.filter(function filter(client) {
       return client.socket !== ws;
     });
+    if(channels[GameID].host !== undefined && channels[GameID].host.socket == ws){
+      delete channels[GameID].host
+    }
     if(channels[GameID].players.length == 0){
       delete channels[GameID]
     }
