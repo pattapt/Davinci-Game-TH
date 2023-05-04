@@ -4,6 +4,16 @@ const moment = require('moment-timezone');
 const { v1: uuidv1, v4: uuidv4 } = require('uuid')
 const fs = require('fs');
 const _ = require('lodash');
+const now = new Date();
+const options = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  };
 
 
 function loadJsonFileToArray(filePath) {
@@ -37,7 +47,10 @@ const CreateRoom = (Req, Res, next) => {
         "max_round": GameRound,
         "current_round": 0,
         "max_player": GameMaxPlayer,
-        "players": []
+        "players": [],
+        "game_status": "free-play", // free-play - answer
+        "win": [],
+        "start": ""
     }
 
     console.log(channels[GameToken])
@@ -97,14 +110,43 @@ const StartGame = (Req, Res, next) => {
     const GameToken = Req.body.game_id
     const foundGame = Object.values(channels).find(game => game.token === GameToken);
 
+    if(channels[GameToken].players.length < 2){
+        Res.json(
+            {
+                "status_code": 400,
+                "msg": "player to low",
+                "sweetAlert": {
+                    "title": "จำนวนผู้เล่นน้อยเกินไป",
+                    "text": "ผู้เล่นน้อยเกินกว่าจะเริ่มเกม ชวนเพื่อของคุณมาเล่นอย่างน้อย 3 คนเพื่อเริ่มเกมเลย!",
+                    "icon": "warning",
+                    "showCancelButton": false,
+                    "confirmButtonColor": "#3085d6",
+                    "cancelButtonColor": "#d33",
+                    "confirmButtonText": "ตกลง!"
+                }
+            }
+        )
+        return
+    }
+
     if(foundGame){
         const GameList = shuffleArray(loadJsonFileToArray('./config/davinci.json'))
         const selected = GameList.slice(0, 10);
         channels[GameToken].list = selected
+
+        channels[GameToken].players = channels[GameToken].players.map((player) => {
+            return {
+                ...player,
+                answer: false,
+            }
+        })
+
+        channels[GameToken].start = GetDate()
         setTimeout(()=>{
             if(channels[GameToken].host && channels[GameToken].host !== undefined){
                 let Game = _.cloneDeep(channels[GameToken]);
                 const CurrentRound = channels[GameToken].current_round
+                channels[GameToken].game_status = "playing"
                 const DataSend = {
                     "status": "start_game",
                     "game": selected[CurrentRound],
@@ -115,7 +157,10 @@ const StartGame = (Req, Res, next) => {
                 // ส่งหา client ว่าเกมเริ่มแล้ว และบอกด้วยว่าข้ออะไร
                 channels[GameToken].players.forEach(function each(client) {
                     if (client.socket.readyState === WebSocket.OPEN) {
-                      client.socket.send(JSON.stringify({status: "start_round", round: CurrentRound}));
+                        const ClientGame = _.cloneDeep(selected[CurrentRound]);
+                        delete ClientGame.hint
+                        delete ClientGame.result
+                        client.socket.send(JSON.stringify({status: "start_round", round: CurrentRound, game: ClientGame}));
                     }
                 });
 
@@ -123,7 +168,6 @@ const StartGame = (Req, Res, next) => {
 
                 channels[GameToken].game = setTimeout(() => {
                     if(channels[GameToken] && channels[GameToken] !== undefined){
-
                         let Game = _.cloneDeep(channels[GameToken]);
                         if(Game.host !== undefined){
                           delete Game.host.socket
@@ -135,13 +179,18 @@ const StartGame = (Req, Res, next) => {
                         if(Game.game){
                           delete Game.game
                         }
-                        channels[GameToken].host.socket.send(JSON.stringify({status: "round_time_out", round: CurrentRound, max_time: selected[CurrentRound].time, Game: Game}));
-                        delete Game.list
-                        channels[GameToken].players.forEach(function each(client) {
-                            if (client.socket.readyState === WebSocket.OPEN) {
-                              client.socket.send(JSON.stringify({status: "round_time_out", round: CurrentRound, max_time: selected[CurrentRound].time, Game: Game}));
-                            }
-                        });
+                        if(channels[GameToken].host && channels[GameToken].host !== undefined){
+                            channels[GameToken].host.socket.send(JSON.stringify({status: "round_time_out", round: CurrentRound, max_time: selected[CurrentRound].time, room_info: Game}));
+                        }
+                        if(channels[GameToken].players && channels[GameToken].players !== undefined){
+                            delete Game.list
+                            channels[GameToken].players.forEach(function each(client) {
+                                if (client.socket.readyState === WebSocket.OPEN) {
+                                  client.socket.send(JSON.stringify({status: "round_time_out", round: CurrentRound, max_time: selected[CurrentRound].time, room_info: Game}));
+                                }
+                            });
+                        }
+                        channels[GameToken].game_status = "free-play"
                         
                     }
                     
@@ -181,11 +230,390 @@ const StartGame = (Req, Res, next) => {
                 }
             }
         )
+        return
     }
     
 }
+
+const GetDate = ()=>{
+    var d = new Date,
+    dformat = [d.getMonth()+1,
+               d.getDate(),
+               d.getFullYear()].join('/')+' '+
+              [d.getHours(),
+               d.getMinutes(),
+               d.getSeconds()].join(':');
+    return d
+}
+
+const ContinueGame = (Req, Res, next) => {
+    const channels = Req.app.get('channels');
+    const GameToken = Req.body.game_id
+    const foundGame = Object.values(channels).find(game => game.token === GameToken);
+
+    if(foundGame){
+        if(channels[GameToken].current_round + 1 == channels[GameToken].max_round){
+            Res.json(
+                {
+                    "status_code": 400,
+                    "data": "end game",
+                }
+            )
+        }
+        const CurrentRound = channels[GameToken].current_round + 1
+        channels[GameToken].current_round++
+        channels[GameToken].start = GetDate()
+        setTimeout(()=>{
+            if(channels[GameToken].host && channels[GameToken].host !== undefined){
+                channels[GameToken].players = channels[GameToken].players.map((player) => {
+                    return {
+                        ...player,
+                        answer: false,
+                    }
+                })
+
+                let Game = _.cloneDeep(channels[GameToken]);
+                channels[GameToken].game_status = "playing"                
+                const DataSend = {
+                    "status": "start_game",
+                    "game": channels[GameToken].list[CurrentRound],
+                    "round": CurrentRound
+                }
+                channels[GameToken].host.socket.send(JSON.stringify(DataSend));
+                console.log(channels[GameToken])
+                // ส่งหา client ว่าเกมเริ่มแล้ว และบอกด้วยว่าข้ออะไร
+                channels[GameToken].players.forEach(function each(client) {
+                    if (client.socket.readyState === WebSocket.OPEN) {
+                      client.socket.send(JSON.stringify({status: "start_round", round: CurrentRound}));
+                    }
+                });
+
+                // SET TIMEOUT OF GAME
+                channels[GameToken].game = setTimeout(() => {
+                    if(channels[GameToken] && channels[GameToken] !== undefined){
+
+                        let Game = _.cloneDeep(channels[GameToken]);
+                        if(Game.host !== undefined){
+                          delete Game.host.socket
+                        }
+                        Game.players = Game.players.map(player => {
+                          delete player.socket
+                          return player;
+                        });
+                        if(Game.game){
+                          delete Game.game
+                        }
+                        if(channels[GameToken].host && channels[GameToken].host !== undefined){
+                            channels[GameToken].host.socket.send(JSON.stringify({status: "round_time_out", round: CurrentRound, max_time: channels[GameToken].list[CurrentRound].time, room_info: Game}));
+                        }
+                        if(channels[GameToken].players && channels[GameToken].players !== undefined){
+                            delete Game.list
+                            channels[GameToken].players.forEach(function each(client) {
+                                if (client.socket.readyState === WebSocket.OPEN) {
+                                  client.socket.send(JSON.stringify({status: "round_time_out", round: CurrentRound, max_time: channels[GameToken].list[CurrentRound].time, room_info: Game}));
+                                }
+                            });
+                        }
+                        channels[GameToken].game_status = "free-play"
+                        
+                    }
+                    
+                }, channels[GameToken].list[CurrentRound].time * 1000);
+            }
+        }, 5000);
+        // ส่งหา Client ว่าเตรียมตัว และนับถอยหลัง
+        channels[GameToken].players.forEach(function each(client) {
+            if (client.socket.readyState === WebSocket.OPEN) {
+              client.socket.send(JSON.stringify({status: "start_game"}));
+            }
+        });
+        Res.json(
+            {
+                "status_code": 200,
+                "msg": "game starting",
+                "success": true,
+                "data": {
+                    "success": true,
+                    "game": channels[GameToken].list[CurrentRound],
+                }
+            }
+        )
+    }else{
+        Res.json(
+            {
+                "status_code": 400,
+                "msg": "invalid room id",
+                "sweetAlert": {
+                    "title": "ไม่พบห้องที่คุณเลือก",
+                    "text": "ไม่พบ ID ห้องที่คุณระบุ โปรดตรวจสอบข้อมูลแล้วลองใหม่อีกครั้ง",
+                    "icon": "error",
+                    "showCancelButton": false,
+                    "confirmButtonColor": "#3085d6",
+                    "cancelButtonColor": "#d33",
+                    "confirmButtonText": "ตกลง!"
+                }
+            }
+        )
+    }
+    
+}
+
+const AnswerGame = (Req, Res, next) => {
+    const channels = Req.app.get('channels');
+    const GameToken = Req.body.game_id
+    const GameRound = Req.body.round
+    const UserAnswer = Req.body.answer
+    const AccounToken = Req.headers.authorization
+    const foundGame = Object.values(channels).find(game => game.token === GameToken);
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const currentTime = `${hours}:${minutes}`;
+
+    
+    if(foundGame){
+        const AccountFound = Object.values(channels[GameToken].players).find(player => player.token === AccounToken);
+        if(!AccountFound){
+            Res.json(
+                {
+                    "status_code": 404,
+                    "msg": "invalid account id",
+                    "sweetAlert": {
+                        "title": "ไม่พบไอดีของคุณ",
+                        "text": "ไม่พบ Session ของคุณโปรดตรวจสอบข้อมูลแล้วลองใหม่อีกครั้ง",
+                        "icon": "error",
+                        "showCancelButton": false,
+                        "confirmButtonColor": "#3085d6",
+                        "cancelButtonColor": "#d33",
+                        "confirmButtonText": "ตกลง!"
+                    },
+                }
+            )
+            return
+        }
+
+        if(channels[GameToken].game_status == "free-play"){
+            const ChatDataOther = {
+                type: "messageRecieve",
+                time: currentTime,
+                sender: AccounToken,
+                sender_name: AccountFound.name,
+                data: {
+                    message: UserAnswer
+                }
+            }
+            if(channels[GameToken].players && channels[GameToken].players !== undefined){
+                channels[GameToken].players.forEach(function each(client) {
+                  if (client.socket.readyState === WebSocket.OPEN && client.token != AccounToken) {
+                    client.socket.send(JSON.stringify(ChatDataOther));
+                  }
+                });
+            }
+            if(channels[GameToken].host && channels[GameToken].host !== undefined){
+                channels[GameToken].host.socket.send(JSON.stringify(ChatDataOther));
+            }
+            ChatDataOther.type = "messageSend"
+            AccountFound.socket.send(JSON.stringify(ChatDataOther));
+            Res.json(
+                {
+                    "status_code": 200,
+                    "success": true,
+                }
+            )
+            return
+        }
+
+
+        if(channels[GameToken].current_round != GameRound){
+            Res.json(
+                {
+                    "status_code": 500,
+                    "msg": "game round not match",
+                    "sweetAlert": {
+                        "title": "คุณไม่สามารถตอบข้อนี้ได้อีกต่อไป",
+                        "text": "ขณะนี้คุณไม่สามารถตอบข้อนี้ได้อีกต่อไปแล้ว",
+                        "icon": "error",
+                        "showCancelButton": false,
+                        "confirmButtonColor": "#3085d6",
+                        "cancelButtonColor": "#d33",
+                        "confirmButtonText": "ตกลง!"
+                    },
+                }
+            )
+            return
+        }
+
+        if(UserAnswer == ""){
+            Res.json(
+                {
+                    "status_code": 200,
+                    "success": true,
+                }
+            )
+            return
+        }
+
+        if(channels[GameToken].list.length !== 0){
+            const Question = channels[GameToken].list[GameRound]
+            if(Question.result.includes(UserAnswer)){
+                if(channels[GameToken].win[GameRound] == undefined){
+                    channels[GameToken].win[GameRound] = []
+                }
+                if(channels[GameToken].win[GameRound].includes(AccounToken)){
+                    const ChatDataOther = {
+                        type: "messageRecieve",
+                        time: currentTime,
+                        sender: AccounToken,
+                        sender_name: AccountFound.name,
+                        data: {
+                            message: "******"
+                        }
+                    }
+                    if(channels[GameToken].players && channels[GameToken].players !== undefined){
+                        channels[GameToken].players.forEach(function each(client) {
+                          if (client.socket.readyState === WebSocket.OPEN && client.token != AccounToken) {
+                            client.socket.send(JSON.stringify(ChatDataOther));
+                          }
+                        });
+                    }
+                    if(channels[GameToken].host && channels[GameToken].host !== undefined){
+                        channels[GameToken].host.socket.send(JSON.stringify(ChatDataOther));
+                    }
+                    ChatDataOther.type = "messageSend"
+                    ChatDataOther.data.message = UserAnswer
+                    AccountFound.socket.send(JSON.stringify(ChatDataOther));
+                }else{
+                    // เพิ่มคะแนนให้คนตอบถูก
+                    channels[GameToken].players = channels[GameToken].players.map((player) => {
+                        if(player.token === AccounToken){
+                            const OnGameStartDate = new Date(channels[GameToken].start)
+                            const Current = new Date(GetDate())
+                            const DateDiff = ((Current - OnGameStartDate) / 1000 ) - 5;
+                            const Score = (((Question.time - DateDiff) / Question.time) * 100) * Question.bonus
+                            console.log(DateDiff)
+                            return {
+                                ...player,
+                                answer: true,
+                                score: player.score + Score,
+                            }
+                        }
+                        return player
+                    })
+                    channels[GameToken].win[GameRound].push(AccounToken)
+                    const ChatDataOther = {
+                        type: "playerWin",
+                        time: currentTime,
+                        sender: AccounToken,
+                        sender_name: AccountFound.name,
+                        data: {
+                            message: `${AccountFound.name} ตอบถูกแล้ว!`
+                        }
+                    }
+                    if(channels[GameToken].players && channels[GameToken].players !== undefined){
+                        channels[GameToken].players.forEach(function each(client) {
+                          if (client.socket.readyState === WebSocket.OPEN && client.token != AccounToken) {
+                            client.socket.send(JSON.stringify(ChatDataOther));
+                          }
+                        });
+                    }
+                    if(channels[GameToken].host && channels[GameToken].host !== undefined){
+                        channels[GameToken].host.socket.send(JSON.stringify(ChatDataOther));
+                    }
+                    ChatDataOther.data.message = `คำตอบถูกต้อง!`
+                    AccountFound.socket.send(JSON.stringify(ChatDataOther));
+
+                    // เช็คว่าตอบถูกกันหมดหรือยัง
+                    const CheckAllRes = Object.values(channels[GameToken].players).find(player => player.answer === false);
+                    if(!CheckAllRes && channels[GameToken] && channels[GameToken] !== undefined){
+
+                        clearTimeout(channels[GameToken].game)
+
+                        let Game = _.cloneDeep(channels[GameToken]);
+                        if(Game.host !== undefined){
+                          delete Game.host.socket
+                        }
+                        Game.players = Game.players.map(player => {
+                          delete player.socket
+                          return player;
+                        });
+                        if(Game.game){
+                          delete Game.game
+                        }
+                        const CurrentRound = channels[GameToken].current_round
+                        if(channels[GameToken].host && channels[GameToken].host !== undefined){
+                            channels[GameToken].host.socket.send(JSON.stringify({status: "round_time_out", round: CurrentRound, max_time: channels[GameToken].list[CurrentRound].time, room_info: Game}));
+                        }
+                        if(channels[GameToken].players && channels[GameToken].players !== undefined){
+                            delete Game.list
+                            channels[GameToken].players.forEach(function each(client) {
+                                if (client.socket.readyState === WebSocket.OPEN) {
+                                  client.socket.send(JSON.stringify({status: "round_time_out", round: CurrentRound, max_time: channels[GameToken].list[CurrentRound].time, room_info: Game}));
+                                }
+                            });
+                        }
+                        channels[GameToken].game_status = "free-play"
+                        
+                    }
+                }
+            }else{
+                const ChatDataOther = {
+                    type: "messageRecieve",
+                    time: currentTime,
+                    sender: AccounToken,
+                    sender_name: AccountFound.name,
+                    data: {
+                        message: UserAnswer
+                    }
+                }
+                if(channels[GameToken].players && channels[GameToken].players !== undefined){
+                    channels[GameToken].players.forEach(function each(client) {
+                      if (client.socket.readyState === WebSocket.OPEN && client.token != AccounToken) {
+                        client.socket.send(JSON.stringify(ChatDataOther));
+                      }
+                    });
+                }
+                if(channels[GameToken].host && channels[GameToken].host !== undefined){
+                    channels[GameToken].host.socket.send(JSON.stringify(ChatDataOther));
+                }
+                ChatDataOther.type = "messageSend"
+                AccountFound.socket.send(JSON.stringify(ChatDataOther));
+    
+            }
+        }
+        
+
+        Res.json(
+            {
+                "status_code": 200,
+                "success": true,
+            }
+        )
+        return
+
+
+    }else{
+        Res.json(
+            {
+                "status_code": 400,
+                "msg": "invalid room id",
+                "sweetAlert": {
+                    "title": "ไม่พบห้องที่คุณเลือก",
+                    "text": "ไม่พบ ID ห้องที่คุณระบุ โปรดตรวจสอบข้อมูลแล้วลองใหม่อีกครั้ง",
+                    "icon": "error",
+                    "showCancelButton": false,
+                    "confirmButtonColor": "#3085d6",
+                    "cancelButtonColor": "#d33",
+                    "confirmButtonText": "ตกลง!"
+                },
+            }
+        )
+    }
+}
+
+
 module.exports = {
     CreateRoom,
     JoinGame,
-    StartGame
+    StartGame,
+    ContinueGame,
+    AnswerGame
 }

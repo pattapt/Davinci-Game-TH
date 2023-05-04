@@ -54,7 +54,9 @@ p, a h1, h2, h3, h4, h5, h6, li, ul, span, small, button{
     z-index: 2;
     margin-top: 10%;
 }
-
+.davinci-game .flex.play{
+    max-width: 480px !important;
+}
 .davinci-game .flex.start{
     width: 450px;
     height: 655px;
@@ -584,4 +586,98 @@ footer p{
     .actions .btYellowBig {
         width: 85%;
     }
+}
+
+.score{
+    margin: 0 auto;
+}
+
+.score ul{
+    list-style-type: none;
+    padding: 0;
+}
+
+.score ul .item{
+    display: flex;
+    align-items: baseline;
+    padding: 0.5rem;
+    background-color: #fff;
+    margin-bottom: 0.5rem;
+    border-radius: 5px;
+    box-shadow: -2px 2px 4px 0 rgba(0,0,0,.3);
+}
+
+.item .username{
+    width: 290px;
+    margin: 0;
+}
+
+.item .point{
+    margin: 0;
+}
+
+.content.chat{
+    padding: 1rem;
+}
+.content.chat .dataChat{
+    padding: 1rem 0rem 1rem 0rem;
+    height: 550px;
+    overflow: auto;
+}
+.content.chat .message {
+    /* width: 100%; */
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    margin: 0 0 10px 0rem;
+}
+
+.content.chat .chat-right .message{
+    align-items: flex-end;
+}
+
+.content.chat .message .chat-content {
+    float: right;
+    padding: 0.7rem 1rem;
+    margin: 0 1rem 5px 0;
+    clear: both;
+    color: #fff;
+    background-image: linear-gradient(80deg, #0179fc, #004ffcc7);
+    border-radius: 0.357rem;
+    box-shadow: 0 4px 8px 0 rgba(34, 41, 47, 0.12);
+    max-width: 75%;
+}
+.content.chat .chat-right .message .chat-content{
+    margin: 0 0 5px 0;
+}
+.content.chat .message .chat-left .chat-content {
+    float: left;
+    margin: 0 0 10px 1rem;
+    color: #6e6b7b;
+    background: none;
+    background-color: white;
+}
+
+.content.chat .message p{
+    margin: 0;
+}
+
+.ChatBox{
+    height: 90px;
+    resize: none;
+}
+
+.chat-win .message .chat-content{
+    max-width: 100% !important;
+    width: 100%;
+    text-align: center;
+    background-image: linear-gradient(80deg, #06c52f, #00d398c7) !important;
+}
+
+
+.chat-lottie{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }

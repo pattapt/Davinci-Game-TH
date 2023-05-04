@@ -3,6 +3,7 @@ class HostApp{
     _SocketStatus = ""
     _OldSiteTitle = ""
     _LoopDelayCount = 0
+    _HintData = []
 
 
     SocketManager(data){
@@ -41,13 +42,12 @@ class HostApp{
                     `))
                 });
                 document.getElementById("TotalWords").innerText = GameData.word
-                document.getElementById("GameTitleRound").innerText = `รอบที่ ${data.round + 1} (Bunus X${GameData.bonus})`
-                const HintData = []
+                document.getElementById("GameTitleRound").innerText = `รอบที่ ${data.round + 1} (Bonus X${GameData.bonus})`
                 let LoopRound = 1;
                 const HintList = $(".HintData")
                 document.querySelectorAll('.HintData .col-md-6').forEach(e => e.remove());
                 GameData.hint.forEach(hint => {
-                    HintData.push(setTimeout(() => {
+                    Host._HintData.push(setTimeout(() => {
                         HintList.prepend($(`
                         <div class="col-md-6 mx-auto text-center">
                                 <h2 class="mb-0">${hint}</h2>
@@ -56,6 +56,36 @@ class HostApp{
                     }, 10000 + (10000 * LoopRound)))
                     LoopRound++
                 });
+            }
+        }
+
+        if(data.status && data.status !== undefined && data.status == "round_time_out"){
+            $(".game-screen").addClass("d-none")
+            $(".SummaryScore").removeClass("d-none")
+            if(Host._HintData && Host._HintData !== undefined && Host._HintData.length !== 0){
+                console.log("Clear all Timout")
+                Host._HintData.forEach(to => {
+                    clearTimeout(to)
+                });
+            }
+            if(data.room_info && data.room_info !== undefined){
+                const RoomData = data.room_info
+                document.querySelectorAll('.score ul li').forEach(e => e.remove());
+                if(RoomData.list && RoomData.players.length !== 0){
+                    const PlayerScore = RoomData.players
+                    PlayerScore.sort((a, b) => a.score - b.score);
+                    const Scoreboard = $(".score ul")
+                    PlayerScore.forEach(playerData => {
+                        Scoreboard.prepend($(`
+                        <li>
+                            <div class="item">
+                                <h3 class="username">${playerData.name}</h3>
+                                <p class="point">${KTApp.NumberFormatWithCommaV2(playerData.score)} Point</p>
+                            </div>
+                        </li>
+                        `))
+                    })
+                }
             }
         }
     }
@@ -69,6 +99,28 @@ class HostApp{
             if(Res.success){
                 $(".waiting-card").addClass("d-none")
                 $(".game-card").removeClass("d-none")
+
+                const LoadingPlayer = document.querySelector(".LoadingPlayer");
+                LoadingPlayer.load("https://assets2.lottiefiles.com/private_files/lf30_khak9ubl.json")
+            }
+            console.log(Res)
+            KTApp.CheckAlert(Res)
+        }).catch(error => {
+            console.log(error)
+            KTApp.ConnectionError()
+        })
+    }
+
+    ContinueGame(){
+        let dataString = {
+            game_id: Host._GameToken,
+        }
+        var PostData = JSON.stringify(dataString);
+        KTApp.RequestAjax("/host/ContinueGame", "POST", PostData).then(Res => {
+            if(Res.success){
+                $(".SummaryScore").addClass("d-none")
+                $(".game-card").removeClass("d-none")
+                $(".countdown").removeClass("d-none")
 
                 const LoadingPlayer = document.querySelector(".LoadingPlayer");
                 LoadingPlayer.load("https://assets2.lottiefiles.com/private_files/lf30_khak9ubl.json")
@@ -161,5 +213,6 @@ $( document ).ready(function() {
     }
 
     $(".StartNow").on('click', Host.StartGame)
+    $(".ContinueGame").on('click', Host.ContinueGame)
 
 })

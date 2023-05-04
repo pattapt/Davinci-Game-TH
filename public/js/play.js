@@ -4,7 +4,89 @@ class PlayApp{
     _OldSiteTitle = ""
     _LoopDelayCount = 0
     _PlayerName = ""
+    _PlayerToken = ""
+    _GameCurrentRound = 0
 
+    WebSocketController(data){
+        const ChatData = $('.dataChat .chat-list')
+
+        if(data.you && data.you !== undefined && data.you !== ""){
+            Play._PlayerToken = data.you.token
+        }
+        if(data.status && data.status !== undefined && data.status == "start_round"){
+            Play._GameCurrentRound = data.round
+            ChatData.append($(`
+            <div class="chat-win">
+                <div class="message">
+                    <div class="chat-content" data-sender-id="">
+                        <p>เริ่มเกมรอบที่ ${data.round+1}</p>
+                    </div>
+                </div>
+            </div>
+            `))
+            Play.ScrollDown()
+        }
+        if(data.status && data.status !== undefined && data.status == "start_game"){
+            $(".wating-screen.chat-lottie").removeClass("d-none")
+            const LottiePlayer = document.querySelector(".LottiePlayer");
+            LottiePlayer.load("https://assets2.lottiefiles.com/private_files/lf30_khak9ubl.json")
+            setTimeout(() => {
+                $(".wating-screen.chat-lottie").addClass("d-none")
+            }, 5000);
+        }
+        
+        if(data.type && data.type !== undefined && data.type == "messageSend"){
+            ChatData.append($(`
+            <div class="chat-right">
+                <div class="message">
+                    <div class="chat-content" data-sender-id="${data.sender}">
+                        <p>${data.data.message}</p>
+                    </div>
+                    <p class="chat-time mb-0 received"><small>${data.sender_name} | ${data.time}</small></p>
+                </div>
+            </div>
+            `))
+            Play.ScrollDown()
+        }
+
+        if(data.type && data.type !== undefined && data.type == "messageRecieve"){
+            ChatData.append($(`
+            <div class="chat-left">
+                <div class="message">
+                    <div class="chat-content" data-sender-id="${data.sender}">
+                        <p>${data.data.message}</p>
+                    </div>
+                    <p class="chat-time mb-0 received"><small>${data.sender_name} | ${data.time}</small></p>
+                </div>
+            </div>
+            `))
+            Play.ScrollDown()
+        }
+
+        if(data.type && data.type !== undefined && data.type == "playerWin"){
+            ChatData.append($(`
+            <div class="chat-win">
+                <div class="message">
+                    <div class="chat-content" data-sender-id="${data.sender}">
+                        <p>${data.data.message}</p>
+                    </div>
+                </div>
+            </div>
+            `))
+            Play.ScrollDown()
+        }
+
+    }
+    
+
+    ScrollDown(){
+        const chatContainer = document.querySelector('.content.chat .dataChat');
+        const ElementHeight = (chatContainer.offsetHeight * 0.4) + chatContainer.offsetHeight;
+
+        if(chatContainer.scrollHeight - chatContainer.scrollTop < ElementHeight){
+            chatContainer.scrollTop = chatContainer.scrollHeight
+        }
+    }
 
 
     isJsonString(str) {
@@ -55,7 +137,7 @@ class PlayApp{
             }else{
                 var data = event.data;
             }
-            // Play.WebSocketController(data)
+            Play.WebSocketController(data)
             console.log(data)
         };
       
@@ -67,6 +149,25 @@ class PlayApp{
             }
             Play._SocketStatus = "disconnected"
             Play.ShowErrorWebsocket()
+        }
+    }
+
+
+    Chat(){
+        const Ans = document.getElementById("MessageBox").value
+        if(!KTApp.isBlank(Ans)){
+            let dataString = {"game_id": Play._GameToken, "round": Play._GameCurrentRound,"answer": Ans}
+            var PostData = JSON.stringify(dataString);
+            const Authorization = {Authorization: Play._PlayerToken}
+            KTApp.RequestAjax("/player/ans", "POST", PostData, Authorization).then(Res => {
+                if(Res.success){
+                    document.getElementById("MessageBox").value = ""
+                }
+                KTApp.CheckAlert(Res)
+            }).catch(error => {
+                console.log(error)
+                KTApp.ConnectionError()
+            })
         }
     }
 }
@@ -84,4 +185,12 @@ $( document ).ready(function() {
         Play.ConnectToSocket()
     }
 
+    $(".SendMessage").on('click', Play.Chat)
+
+    $("#MessageBox").keypress(function (e) {
+        if(e.which === 13 && !e.shiftKey) {
+            e.preventDefault();
+            Play.Chat()
+        }
+    });
 })

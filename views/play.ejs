@@ -36,24 +36,28 @@
 <body class="davinci-game">
     <div class="background"></div>
     <%- include('src/navbar') %>
-    <div class="flex">
+    <div class="flex play">
         <header>
             <div class="logo mt-2 mb-2">
                 <img src="/public/images/logo-v1.png" style="width: 200px">
                 <h3>JUST GUESS AND WIN</h3>
             </div>
         </header>
-        <div class="card play-card mx-auto">
+        <div class="card play-card mx-auto" style="min-height: 750px;">
             <div class="title"><span class="gTitle"><h2>รอคนอื่นสักครู่!</h2></span></div>
-            <div class="content">
-                <div class="wating-screen">
-                    <lottie-player src="https://assets3.lottiefiles.com/packages/lf20_raiw2hpe.json"  background="transparent"  speed="1"  style="width: 300px; height: 300px;"  loop autoplay></lottie-player>
+            <div class="content chat">
+                <div class="dataChat">
+                    <div class="chat-list"></div>
                 </div>
-                <div class="wating-screen">
-                    <lottie-player src="https://assets2.lottiefiles.com/private_files/lf30_khak9ubl.json"  background="transparent"  speed="1"  style="width: 300px; height: 300px;"  autoplay></lottie-player>
+                <div class="wating-screen chat-lottie d-none">
+                    <lottie-player src="https://assets2.lottiefiles.com/private_files/lf30_khak9ubl.json" class="LottiePlayer" background="transparent"  speed="1"  style="width: 300px; height: 300px;" autoplay></lottie-player>
                 </div>
-                <div class="actions">
-                    <a href="/" class="btYellowBig ic-playHome"><strong>ออกจากห้อง</strong></a>
+                <div class="input-group input-group-mergeform-send-message">
+                    <textarea class="form-control ChatBox" placeholder="พิมพ์คำตอบหรือพูดคุยที่นี่" id="MessageBox" rows="3" required=""></textarea>
+                </div>
+                <div class="actions" style="flex-direction: column;">
+                    <button class="btBlueBig ic-rooms SendMessage"><strong>ส่งคำตอบ/แชท!</strong></button>
+                    <a class="btYellowBig ic-rooms ContinueGame" href="/"><strong>ออกจากเกม!</strong></a>
                 </div>
             </div>
         </div>

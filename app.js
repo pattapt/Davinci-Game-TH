@@ -22,7 +22,7 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 app.use(helmet.contentSecurityPolicy({
   directives: {
-    defaultSrc: ["'self'", "https://assets3.lottiefiles.com", "https://assets2.lottiefiles.com"],
+    defaultSrc: ["'self'", "https://assets3.lottiefiles.com", "https://assets2.lottiefiles.com", "https://assets1.lottiefiles.com", "https://assets4.lottiefiles.com", "https://assets5.lottiefiles.com"],
     scriptSrc: ["'self'", "https://www.google.com", "https://code.jquery.com", "https://cdn.jsdelivr.net", "https://www.gstatic.com", "https://unpkg.com"],
     frameSrc: ["'self'", 'https://www.google.com/', "tps://unpkg.com"]
     
@@ -83,7 +83,10 @@ wss.on('connection', function connection(ws, req) {
         "max_round": 10,
         "current_round": 0,
         "max_player": 30,
-        "players": []
+        "game_status": "free-play", // free-play - playing
+        "players": [],
+        "win": [],
+        "start": ""
       }
   }
   if(type !== undefined && type == "player"){
@@ -92,6 +95,7 @@ wss.on('connection', function connection(ws, req) {
       "id": SocketID,
       "token": uuidv4(),
       "score": 0,
+      "answer": false,
       "socket": ws
     }
     channels[GameID].players.push(PlayerData);
@@ -107,6 +111,7 @@ wss.on('connection', function connection(ws, req) {
       delete player.socket
       return player;
     });
+    delete Game.game
     ws.send(JSON.stringify(Game));
     delete Game.you
     if(Game.game){
@@ -178,8 +183,16 @@ wss.on('connection', function connection(ws, req) {
       }
       if(channels[GameID].host !== undefined && channels[GameID].host.socket == ws){
         delete channels[GameID].host
+        if(channels[GameID].players && channels[GameID].players !== undefined){
+          channels[GameID].players.forEach(function each(client) {
+            if (client.socket.readyState === WebSocket.OPEN && client.socket != ws) {
+              client.socket.send(JSON.stringify({error: "host_disconect"}));
+            }
+          });
+          delete channels[GameID]
+        }
       }
-      if(channels[GameID].players.length == 0 && channels[GameID].host == undefined){
+      if(channels[GameID] && channels[GameID].players.length == 0 && channels[GameID].host == undefined){
         delete channels[GameID]
       }
     }
