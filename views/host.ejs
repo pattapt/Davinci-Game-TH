@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!--required meta tags-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--meta-->
+    <link rel="icon" href="<%- main_site.favicon %>" type="image/png" sizes="16x16">
+    <title>เปิดตี๊ | <%- main_site.title %></title>
+    <meta name="description" content="<%- main_site.description %>">
+    <meta name="author" content="<%- main_site.author %>">
+
+    <!--twitter og-->
+    <meta name="twitter:site" content="@<%- main_site.author %>">
+    <meta name="twitter:creator" content="@<%- main_site.author %>">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<%- main_site.title %>">
+    <meta name="twitter:description" content="<%- main_site.description %>">
+    <meta name="twitter:image" content="#">
+
+    <!--facebook og-->
+    <meta property="og:url" content="#">
+    <meta name="twitter:title" content="<%- main_site.title %>">
+    <meta property="og:description" content="<%- main_site.description %>">
+    <meta property="og:image" content="#">
+    <meta property="og:image:secure_url" content="#">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="600">
+
+    <%- include('src/header') %>
+</head>
+
+<body class="davinci-game">
+    <div class="background"></div>
+    <%- include('src/navbar') %>
+    <div class="flex">
+        <header>
+            <div class="logo mt-2 mb-2">
+                <img src="/public/images/logo-v1.png" style="width: 200px">
+                <h3>JUST GUESS AND WIN</h3>
+            </div>
+        </header>
+        <div class="card play-card mx-auto waiting-card">
+            <div class="title"><span class="gTitle"><h2>เปิดตี๊เลย!</h2></span></div>
+            <div class="content">
+                <div class="setting">
+                    <div class="selector" data-type="normal">
+                        <div class="img">
+                            <img src="/public/images/setting.png" class="logo">
+                        </div>
+                        <h2 class="mode-name">โหมดปกติ</h2>
+                    </div>
+                    <div class="selector" data-type="normal">
+                        <div class="img">
+                            <img src="/public/images/setting.png" class="logo">
+                        </div>
+                        <h2 class="mode-name">โหมดแข่งขัน</h2>
+                    </div>
+                    <div class="selector" data-type="normal">
+                        <div class="img">
+                            <img src="/public/images/setting.png" class="logo">
+                        </div>
+                        <h2 class="mode-name">โหมดอะไรไม่รู้</h2>
+                    </div>
+                </div>
+                <div class="game-info">
+                    <div class="detail">
+                        <div class="room-id mx-auto">
+                            <h2 class="mb-0">ไอดีห้อง : <span id="RoomID"></span></h2>
+                        </div>
+                        <p class="m-2">ในโหมดปกติผู้เล่นจะได้รับคำถาม 10 ข้อ และในแต่ละช้อจะต้องตอบให้ได้ในเวลา 1 นาที ผู้เล่นที่ตอบได้คะแนนคนแรกจะได้คะแนนมากที่สุด และลดไปตามลำดับที่ตอบถูกและเวลา หากหมดเวลาแล้วยังไม่สามารถตอบได้จะได้คะแนนเป็น 0 คะแนน</p>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button class="btBlueBig ic-rooms StartNow"><strong>เริ่มเกมเลย!</strong></button>
+                </div>
+                <div class="game-info">
+                    <div class="playerlist">
+                        <div class="row"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card play-card mx-auto game-card d-none">
+            <div class="title"><span class="gTitle"><h2 id="GameTitleRound">กำลังเริ่มเกม!!</h2></span></div>
+            <div class="content countdown">
+                <div class="wating-screen">
+                    <lottie-player src="https://assets2.lottiefiles.com/private_files/lf30_khak9ubl.json" class="LoadingPlayer"  background="transparent"  speed="1"  style="width: 300px; height: 300px;"  autoplay></lottie-player>
+                </div>
+            </div>
+            <div class="content game-screen d-none">
+                <div class="setting game-screen-img">
+                    <div class="game-img" data-type="normal">
+                        <div class="img">
+                            <img src="/public/images/game/3/1.png" class="logo">
+                        </div>
+                    </div>
+                    <div class="game-img" data-type="normal">
+                        <div class="img">
+                            <img src="/public/images/game/3/2.png" class="logo">
+                        </div>
+                    </div>
+                    <div class="game-img" data-type="normal">
+                        <div class="img">
+                            <img src="/public/images/game/3/3.png" class="logo">
+                        </div>
+                    </div>
+                    <div class="game-img" data-type="normal">
+                        <div class="img">
+                            <img src="/public/images/game/3/4.png" class="logo">
+                        </div>
+                    </div>
+                </div>
+                <div class="game-info">
+                    <div class="hint">
+                        <div class="room-id mx-auto">
+                            <h2 class="mb-0"><span id="TotalWords">0</span> พยางค์</h2>
+                        </div>
+                        <div class="row mt-3 mb-4 HintData">
+                            <div class="col-md-6 mx-auto">
+                                <h2 class="mb-0">คำใบ้ที่ 1 ภาพแรกคนในภาพชื่อแกงส้ม</h2>
+                            </div>
+                            <div class="col-md-6 mx-auto">
+                                <h2 class="mb-0">คำใบ้ที่ 2 ภาพสุดท้ายเป็นการ์ตูน เทเลทับบี้ ชื่อว่า โพ</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <p>Made by Ctrl C + Ctrl V in my computer</p>
+        </footer>
+    </div>
+    <%- include('src/script') %>
+    <script src="/public/js/host.js"></script>
+</body>
+
+</html>

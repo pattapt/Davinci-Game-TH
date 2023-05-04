@@ -22,9 +22,10 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 app.use(helmet.contentSecurityPolicy({
   directives: {
-    defaultSrc: ["'self'"],
-    scriptSrc: ["'self'", "https://www.google.com", "https://code.jquery.com", "https://cdn.jsdelivr.net", "https://www.gstatic.com"],
-    frameSrc: ["'self'", 'https://www.google.com/']
+    defaultSrc: ["'self'", "https://assets3.lottiefiles.com", "https://assets2.lottiefiles.com"],
+    scriptSrc: ["'self'", "https://www.google.com", "https://code.jquery.com", "https://cdn.jsdelivr.net", "https://www.gstatic.com", "https://unpkg.com"],
+    frameSrc: ["'self'", 'https://www.google.com/', "tps://unpkg.com"]
+    
   }
 }))
 app.use(express.json())
@@ -53,7 +54,6 @@ const channels = [];
 app.set('channels', channels)
 
 wss.on('connection', function connection(ws, req) {
-  console.log(req.url)
   const channel = req.url.substring(1);
   const Ch = channel.split("/")
   const Prefix = Ch[0];
@@ -67,7 +67,6 @@ wss.on('connection', function connection(ws, req) {
   const params = new URLSearchParams(queryObject);
   const type = params.get('type');
   const name = params.get('name');
-  console.log(type, name)
 
   if(Prefix != "game"){
     ws.close();
@@ -110,6 +109,9 @@ wss.on('connection', function connection(ws, req) {
     });
     ws.send(JSON.stringify(Game));
     delete Game.you
+    if(Game.game){
+      delete Game.game
+    }
     channels[GameID].players.forEach(function each(client) {
       if (client.socket.readyState === WebSocket.OPEN && client.socket != ws) {
         client.socket.send(JSON.stringify(Game));
@@ -153,16 +155,36 @@ wss.on('connection', function connection(ws, req) {
 
   // Remove the WebSocket connection from the channel when it is closed
   ws.on('close', function close() {
-    console.log(`Connection to channel closed "${GameID}" From IP: ${ip} Socket ID : ${SocketID}`)
-    channels[GameID].players = channels[GameID].players.filter(function filter(client) {
-      return client.socket !== ws;
-    });
-    if(channels[GameID].host !== undefined && channels[GameID].host.socket == ws){
-      delete channels[GameID].host
+    if(channels[GameID] && channels[GameID] !== undefined){
+      console.log(`Connection to channel closed "${GameID}" From IP: ${ip} Socket ID : ${SocketID}`)
+      if(channels[GameID].players !== undefined){
+        // Notify to host
+        if(channels[GameID].host !== undefined){
+          let Game = _.cloneDeep(channels[GameID]);
+          if(Game.game){
+            delete Game.game
+          }
+          Game.leave_player = {
+            id: SocketID
+          }
+          if(channels[GameID].host && channels[GameID].host !== undefined && Game !== undefined){
+            channels[GameID].host.socket.send(JSON.stringify(Game));
+          }
+          
+        }
+        channels[GameID].players = channels[GameID].players.filter(function filter(client) {
+          return client.socket !== ws;
+        });
+      }
+      if(channels[GameID].host !== undefined && channels[GameID].host.socket == ws){
+        delete channels[GameID].host
+      }
+      if(channels[GameID].players.length == 0 && channels[GameID].host == undefined){
+        delete channels[GameID]
+      }
     }
-    if(channels[GameID].players.length == 0){
-      delete channels[GameID]
-    }
+    
+
     app.set('channels', channels)
   });
 });
