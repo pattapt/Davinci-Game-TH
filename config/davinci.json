@@ -1,0 +1,772 @@
+[
+    {
+        "id": 1,
+        "hint": [
+            "คำใบ้ที่ 1 ภาพที่ 2 เป็นวัชพืชน้ำขนาดเล็ก",
+            "คำใบ้ที่ 2 พืชน้ำใน ภาพที่ 2 มีชื่อว่า จอก "
+        ],
+        "picture": [
+            "/public/images/game/1/1.png",
+            "/public/images/game/1/2.png",
+            "/public/images/game/1/3.png"
+        ],
+        "result": ["กระจอกเทศ"],
+        "time": 60,
+        "word": 3,
+        "bonus": 1.5
+    },
+    {
+        "id": 2,
+        "hint": [
+            "คำใบ้ที่ 1 เป็นการเล่นคำ",
+            "คำใบ้ที่ 2 เป็นสิ่งที่เกี่ยวข้องกับการสร้างเสียง"
+        ],
+        "picture": [
+            "/public/images/game/2/1.png",
+            "/public/images/game/2/2.png"
+        ],
+        "result": ["เก้าอี้ดนตรี"],
+        "time": 30,
+        "word": 4,
+        "bonus": 1
+    },
+    {
+        "id": 3,
+        "hint": [
+            "คำใบ้ที่ 1 ภาพแรกคนในภาพชื่อแกงส้ม",
+            "คำใบ้ที่ 2 ภาพสุดท้ายเป็นการ์ตูน เทเลทับบี้ ชื่อว่า โพ"
+            
+        ],
+        "picture": [
+            "/public/images/game/3/1.png",
+            "/public/images/game/3/2.png",
+            "/public/images/game/3/3.png",
+            "/public/images/game/3/4.png"
+        ],
+        "result": ["แกงเทโพ"],
+        "time": 90,
+        "word": 3,
+        "bonus": 1.5
+    },
+    {
+        "id": 4,
+        "hint": [
+            "คำใบ้ที่ 1 ภาพที่ 2 เป็นการตัดคำว่ายาออก",
+            "คำใบ้ที่ 2 เอาภาพที่ 3 มาต่อ และดูว่าเป็นจำนวนอะไร"
+        ],
+        "picture": [
+            "/public/images/game/4/1.png",
+            "/public/images/game/4/2.png",
+            "/public/images/game/4/3.png"
+        ],
+        "result": ["ควบคู่"],
+        "time": 90,
+        "word": 2,
+        "bonus": 2
+    },
+    {
+        "id": 5,
+        "hint": [
+            "คำใบ้ที่ 1 เป็นตัวละครชื่อว่าเคโรโระ ",
+            "คำใบ้ที่ 2 จำนวนสองเท่าภาษาอังกฤษ"
+        ],
+        "picture": [
+            "/public/images/game/5/1.png",
+            "/public/images/game/5/2.png"
+        ],
+        "result": ["เคเบิ้ลทีวี"],
+        "time": 90,
+        "word": 4,
+        "bonus": 2
+    },
+    {
+        "id": 6,
+        "hint": [
+            "คำใบ้ที่ 1 ชื่อพืชล้มลุกมีหัวใต้ดิน",
+            "คำใบ้ที่ 2 ผักจำพวกรากที่โดยทั่วไปมีสีส้ม "
+        ],
+        "picture": [
+            "/public/images/game/6/1.png",
+            "/public/images/game/6/2.png"
+        ],
+        "result": ["แคร์รอต","แครอท"],
+        "time": 30,
+        "word": 2,
+        "bonus": 1
+    },
+    {
+        "id": 7,
+        "hint": [
+            "คำใบ้ที่ 1 จ่าเฉย",
+            "คำใบ้ที่ 2 เป็นชื่อขนมไทยชนิดหนึ่ง"
+        ], 
+        "picture": [
+            "/public/images/game/7/1.png",
+            "/public/images/game/7/2.png"
+        ],
+        "result": ["จ่ามงกุฎ"],
+        "time": 60,
+        "word": 3,
+        "bonus": 1
+    },
+    {
+        "id": 8,
+        "hint": [
+            "คำใบ้ที่ 1 ม้ากระโจน",
+            "คำใบ้ที่ 2 ตัดกระออก"
+        ],
+        "picture": [
+            "/public/images/game/8/1.png",
+            "/public/images/game/8/2.png",
+            "/public/images/game/8/3.png"
+        ],
+        "result": ["โจรสลัด"],
+        "time": 90,
+        "word": 3,
+        "bonus": 1.5
+    },
+    {
+        "id": 9,
+        "hint": [
+            "คำใบ้ที่ 1 ผึ้ง ภาษาอังกฤษ",
+            "คำใบ้ที่ 2 ผึ้งกี่ตัว "
+        ],
+        "picture": [
+            "/public/images/game/9/1.png",
+            "/public/images/game/9/2.png",
+            "/public/images/game/9/3.png"
+        ],
+        "result": ["ดินสอ2B","ดินสอ 2B"],
+        "time": 60,
+        "word": 4,
+        "bonus": 1.5
+    },
+    {
+        "id": 10,
+        "hint": [
+            "คำใบ้ที่ 1 สัตว์ดึกดำบรรพ์",
+            "คำใบ้ที่ 2 สูญพันธุ์ไปแล้ว"
+        ],
+        "picture": [
+            "/public/images/game/10/1.png",
+            "/public/images/game/10/2.png",
+            "/public/images/game/10/3.png"
+        ],
+        "result": ["ไดโนเสาร์"],
+        "time": 30,
+        "word": 3,
+        "bonus": 1.5
+    },
+    {
+        "id": 11,
+        "hint": [
+            "คำใบ้ที่ 1 หมาพันธุ์ปั๊ก",
+            "คำใบ้ที่ 2 มีกี่ตา"
+        ],
+        "picture": [
+            "/public/images/game/11/1.png",
+            "/public/images/game/11/2.png"
+        ],
+        "result": ["ปลั๊กสามตา","ปั๊กสามตา"],
+        "time": 60,
+        "word": 3,
+        "bonus": 1.5
+    },
+    {
+        "id": 12,
+        "hint": [
+            "คำใบ้ที่ 1 เป็นอาหารจีน",
+            "คำใบ้ที่ 2 ภาพที่ 2 เป็นการปัก"
+        ],
+        "picture": [
+            "/public/images/game/12/1.png",
+            "/public/images/game/12/2.png",
+            "/public/images/game/12/3.png"
+        ],
+        "result": ["เป็ดปักกิ่ง"],
+        "time": 90,
+        "word": 3,
+        "bonus": 2
+    },
+    {
+        "id": 13,
+        "hint": [
+            "คำใบ้ที่ 1 ภาพแรกเป็นการเปย์สาว",
+            "คำใบ้ที่ 2 เป็นกีฬาชนิดหนึ่งที่เล่นโดยการโยนลูกบอลเหล็ก"
+        ],
+        "picture": [
+            "/public/images/game/13/1.png",
+            "/public/images/game/13/2.png"        
+        ],
+        "result": ["เปตอง"],
+        "time": 90,
+        "word": 2,
+        "bonus": 2
+    }, 
+    {
+        "id": 14,
+        "hint": [
+            "คำใบ้ที่ ก่อนเป็นพระ จะต้องเป็นอะไร",
+            "คำใบ้ที่ คู่ปรับกับครุฑ"
+        ],
+        "picture": [
+            "/public/images/game/14/1.png",
+            "/public/images/game/14/2.png",
+            "/public/images/game/14/3.png"
+                ],
+        "result": ["พญานาค"],
+        "time": 60,
+        "word": 3,
+        "bonus": 1.5
+    }, 
+    {
+        "id": 15,
+        "hint": [
+            "คำใบ้ที่ ดอกบัวไม่บาน",
+            "คำใบ้ที่ ปกรณ์ ในตู้ปลาไม่มีปลา."
+        ],
+        "picture": [
+            "/public/images/game/15/1.png",
+            "/public/images/game/15/2.png",
+            "/public/images/game/15/3.png",
+            "/public/images/game/15/4.png"
+                ],
+        "result": ["พยากรณ์"],
+        "time": 90,
+        "word": 3,
+        "bonus": 2
+    }, 
+    {
+        "id": 16,
+        "hint": [
+            "คำใบ้ที่ 1 หมากำลังวิ่งมาหา",
+            "คำใบ้ที่ 2 เป็นผืนน้ำทะเลขนาดใหญ่เชื่อมต่อกัน"
+        ],
+        "picture": [
+            "/public/images/game/16/1.png",
+            "/public/images/game/16/2.png"
+                ],
+        "result": ["มหาสมุทร"],
+        "time": 60,
+        "word": 3,
+        "bonus": 1.5
+    }, 
+    {
+        "id": 17,
+        "hint": [
+            "คำใบ้ที่ 1 นำคำมาต่อกันสิ",
+            "คำใบ้ที่ 2 รสชาติเปรี้ยว"
+        ],
+        "picture": [
+            "/public/images/game/17/1.png",
+            "/public/images/game/17/2.png",
+            "/public/images/game/17/3.png"
+                ],
+        "result": ["ยำแหนม"],
+        "time": 90,
+        "word": 2,
+        "bonus": 2
+    }, 
+    {
+        "id": 18,
+        "hint": [
+            "คำใบ้ที่ 1 นำคำมาต่อกันสิ",
+            "คำใบ้ที่ 2 ขนส่งมวลชนในกรุงเทพมหานคร"
+        ],
+        "picture": [
+            "/public/images/game/18/1.png",
+            "/public/images/game/18/2.png",
+            "/public/images/game/18/3.png"
+                ],
+        "result": ["รถไฟฟ้า"],
+        "time": 60,
+        "word": 3,
+        "bonus": 1.5
+    }, 
+    {
+        "id": 19,
+        "hint": [
+            "คำใบ้ที่ 1 เรือเป็นสนิม",
+            "คำใบ้ที่ 2 ไม่เอาม.ม้า"
+        ],
+        "picture": [
+            "/public/images/game/19/1.png",
+            "/public/images/game/19/2.png",
+            "/public/images/game/19/3.png",
+            "/public/images/game/19/4.png"
+                ],
+        "result": ["รสนิยม"],
+        "time": 90,
+        "word": 4,
+        "bonus": 2
+    }, 
+    {
+        "id": 20,
+        "hint": [
+            "คำใบ้ที่ 1 สายลม",
+            "คำใบ้ที่ 2 คนบ้า"
+        ],
+        "picture": [
+            "/public/images/game/20/1.png",
+            "/public/images/game/20/2.png",
+            "/public/images/game/20/3.png"
+                ],
+        "result": ["ลมบ้าหมู"],
+        "time": 60,
+        "word": 3,
+        "bonus": 2
+    }, 
+    {
+        "id": 21,
+        "hint": [
+            "คำใบ้ที่ 1 คำผวน ลา สาย ",
+            "คำใบ้ที่ 2 ตับ ไม้ตรี"
+        ],
+        "picture": [
+            "/public/images/game/21/1.png",
+            "/public/images/game/21/2.png",
+            "/public/images/game/21/3.png"
+                ],
+        "result": ["ลับสายตา"],
+        "time": 90,
+        "word": 3,
+        "bonus": 2
+    }, 
+    {
+        "id": 22,
+        "hint": [
+            "คำใบ้ที่ 1 ลำต้นของต้นไม้",
+            "คำใบ้ที่ 2 ข้าวของพัง"
+        ],
+        "picture": [
+            "/public/images/game/22/1.png",
+            "/public/images/game/22/2.png"
+                ],
+        "result": ["ลำพัง"],
+        "time": 60,
+        "word": 2,
+        "bonus": 1.5
+    }, 
+    {
+        "id": 23,
+        "hint": [
+            "คำใบ้ที่ 1 วงรี",
+            "คำใบ้ที่ 2 ราดน้ำ"
+        ],
+        "picture": [
+            "/public/images/game/23/1.png",
+            "/public/images/game/23/2.png"
+                ],
+        "result": ["ลีลาศ"],
+        "time": 60,
+        "word": 2,
+        "bonus": 1.5
+    }, 
+    {
+        "id": 24,
+        "hint": [
+            "คำใบ้ที่ 1 บันทึกความจำ",
+            "คำใบ้ที่ 2 มหาสมุทรกับโน๊ต อุดม "
+        ],
+        "picture": [
+            "/public/images/game/24/1.png",
+            "/public/images/game/24/2.png"
+                ],
+        "result": ["สมุดโน้ต","สมุดโน๊ต"],
+        "time": 60,
+        "word": 3,
+        "bonus": 1.5
+    }, 
+    {
+        "id": 25,
+        "hint": [
+            "คำใบ้ที่ 1 เป็นจังหวัดหนึ่งในภาคกลางของประเทศไทย ",
+            "คำใบ้ที่ 2 เกิดสงคราม"
+        ],
+        "picture": [
+            "/public/images/game/25/1.png",
+            "/public/images/game/25/2.png"
+                ],
+        "result": ["สมุทรสงคราม"],
+        "time": 30,
+        "word": 4,
+        "bonus": 1.5
+    }, 
+    {
+        "id": 26,
+        "hint": [
+            "คำใบ้ที่ 1 สระน้ำกับศาลพระภูมิ",
+            "คำใบ้ที่ 2 สิ่งที่มีมวลและปริมาตร"
+        ],
+        "picture": [
+            "/public/images/game/26/1.png",
+            "/public/images/game/26/2.png"
+                ],
+        "result": ["สสาร"],
+        "time": 30,
+        "word": 2,
+        "bonus": 1.5
+    }, 
+    {
+        "id": 27,
+        "hint": [
+            "คำใบ้ที่ 1 มีตาล้อมรอบผล",
+            "คำใบ้ที่ 2 ผลไม้ชนิดหนึ่ง"
+        ],
+        "picture": [
+            "/public/images/game/27/1.png",
+            "/public/images/game/27/2.png",
+            "/public/images/game/27/3.png"
+                ],
+        "result": ["สับปะรด"],
+        "time": 60,
+        "word": 3,
+        "bonus": 1.5
+    }, 
+    {
+        "id": 28,
+        "hint": [
+            "คำใบ้ที่ 1 synonym ของดวงจันทร์",
+            "คำใบ้ที่ 2 เป็นสัตว์ไม่มีกระดูกสันหลังอยู่ในดิน"
+        ],
+        "picture": [
+            "/public/images/game/28/1.png",
+            "/public/images/game/28/2.png"
+                ],
+        "result": ["ไส้เดือน"],
+        "time": 60,
+        "word": 2,
+        "bonus": 1.5
+    }, 
+    {
+        "id": 29,
+        "hint": [
+            "คำใบ้ที่ 1 ตุ๊กตาตัวเล็กๆ",
+            "คำใบ้ที่ 2 เชิดหน้า"
+        ],
+        "picture": [
+            "/public/images/game/29/1.png",
+            "/public/images/game/29/2.png"
+                ],
+        "result": ["หุ่นเชิด"],
+        "time": 90,
+        "word": 2,
+        "bonus": 2
+    }, 
+    {
+        "id": 30,
+        "hint": [
+            "คำใบ้ที่ 1 ส่วนประกอบของกระดูกส่วนไหล่ ",
+            "คำใบ้ที่ 2 ภาพที่ 2 ปลาร้านะจ๊ะ"
+        ],
+        "picture": [
+            "/public/images/game/30/1.png",
+            "/public/images/game/30/2.png"
+                ],
+        "result": ["ไหปลาร้า"],
+        "time": 60,
+        "word": 3,
+        "bonus": 1.5
+    }, 
+    {
+        "id": 31,
+        "hint": [
+            "คำใบ้ที่ 1  วงกลม",
+            "คำใบ้ที่ 2 แม่กล่อมลูกนอน"
+        ],
+        "picture": [
+            "/public/images/game/31/1.png",
+            "/public/images/game/31/2.png"
+                ],
+        "result": ["กลมกล่อม"],
+        "time": 60,
+        "word": 2,
+        "bonus": 1.5
+    }, 
+    {
+        "id": 32,
+        "hint": [
+            "คำใบ้ที่ 1 กำอะไรนะ",
+            "คำใบ้ที่ 2 เผ่าพันธุ์,"
+        ],
+        "picture": [
+            "/public/images/game/32/1.png",
+            "/public/images/game/32/2.png"
+                ],
+        "result": ["กำพืด","กำพืช"],
+        "time": 30,
+        "word": 2,
+        "bonus": 1.5
+    }, 
+    {
+        "id": 33,
+        "hint": [
+            "คำใบ้ที่ 1 มะนาวแพงจัง",
+            "คำใบ้ที่ 2 สิ่งที่เป็นผนังสูง"
+        ],
+        "picture": [
+            "/public/images/game/33/1.png",
+            "/public/images/game/33/2.png"
+                ],
+        "result": ["กำแพง"],
+        "time": 60,
+        "word": 2,
+        "bonus": 2
+    }, 
+    {
+        "id": 34,
+        "hint": [
+            "คำใบ้ที่ 1 หมามะพร้าวกำลังทำอะไร",
+            "คำใบ้ที่ 2 เป็นเกาะชนิดหนึ่ง"
+        ],
+        "picture": [
+            "/public/images/game/34/1.png"
+           
+                ],
+        "result": ["เกาะเต่า"],
+        "time": 90,
+        "word": 2,
+        "bonus": 2
+    }, 
+    {
+        "id": 35,
+        "hint": [
+            "คำใบ้ที่ 1 ออกแบบเพื่อใช้ติดประดับเสื้อผ้า ",
+            "คำใบ้ที่ 2 การรวมคำ"
+        ],
+        "picture": [
+            "/public/images/game/35/1.png",
+            "/public/images/game/35/2.png"
+           
+                ],
+        "result": ["เข็มกลัด"],
+        "time": 60,
+        "word": 2,
+        "bonus": 1.5
+    }, 
+    {
+        "id": 36,
+        "hint": [
+            "คำใบ้ที่ 1 ลูกศรชี้ทีอะไร",
+            "คำใบ้ที่ 2 เป็นชื่อเขาลูกหนึ่ง"
+        ],
+        "picture": [
+            "/public/images/game/36/1.png",
+            "/public/images/game/36/2.png"
+           
+                ],
+        "result": ["เขาตะเกียบ"],
+        "time": 30,
+        "word": 3,
+        "bonus": 1.5
+    }, 
+    {
+        "id": 37,
+        "hint": [
+            "คำใบ้ที่ 1 สังเกตวงกลม",
+            "คำใบ้ที่ 2 วงกลมกำลังทำอะไร"
+        ],
+        "picture": [
+            "/public/images/game/37/1.png",
+            "/public/images/game/37/2.png"
+           
+                ],
+        "result": ["เขาวงกต"],
+        "time": 90,
+        "word": 3,
+        "bonus": 2
+    }, 
+    {
+        "id": 38,
+        "hint": [
+            "คำใบ้ที่ 1 เป็นคำผวน",
+            "คำใบ้ที่ 2 คนกำลังขันอะไร"
+        ],
+        "picture": [
+            "/public/images/game/38/1.png"
+           
+                ],
+        "result": ["ไขมัน"],
+        "time": 90,
+        "word": 2,
+        "bonus": 2
+    }, 
+    {
+        "id": 39,
+        "hint": [
+            "คำใบ้ที่ 1 ลูกท้อ",
+            "คำใบ้ที่ 2 ของแท้แน่นอน"
+        ],
+        "picture": [
+            "/public/images/game/39/1.png"           
+                ],
+        "result": ["ท้อแท้"],
+        "time": 60,
+        "word": 2,
+        "bonus": 1.5
+    }, 
+    {
+        "id": 40,
+        "hint": [
+            "คำใบ้ที่ 1 ห้องรกจัง",
+            "คำใบ้ที่ 2 เด็กระยะแรกเกิด"
+        ],
+        "picture": [
+            "/public/images/game/40/1.png",           
+            "/public/images/game/40/2.png"           
+                ],
+        "result": ["ทารก"],
+        "time": 30,
+        "word": 2,
+        "bonus": 1.5
+    }, 
+    {
+        "id": 41,
+        "hint": [
+            "คำใบ้ที่ 1 มีความหมายว่า ขัดใจ",
+            "คำใบ้ที่ 2 เอาคำมารวมกัน"
+        ],
+        "picture": [
+            "/public/images/game/41/1.png",           
+            "/public/images/game/41/2.png",         
+            "/public/images/game/41/3.png",         
+            "/public/images/game/41/4.png"         
+                ],
+        "result": ["บาดตาบาดใจ"],
+        "time": 30,
+        "word": 4,
+        "bonus": 1.5
+    }, 
+    {
+        "id": 42,
+        "hint": [
+            "คำใบ้ที่ 1 ปัดมาสคาร่า",
+            "คำใบ้ที่ 2 เป็นสิ่งที่มนุษย์จำเป็นต่อการดำรงชีวิต"
+        ],
+        "picture": [
+            "/public/images/game/42/1.png",           
+            "/public/images/game/42/2.png"         
+                ],
+        "result": ["ปัจจัยสี่"],
+        "time": 60,
+        "word": 3,
+        "bonus": 1.5
+    }, 
+    {
+        "id": 43,
+        "hint": [
+            "คำใบ้ที่ 1 ภูมิภาคในประเทศไทย",
+            "คำใบ้ที่ 2 มีความหมายว่า แยกจากกันไป"
+        ],
+        "picture": [
+            "/public/images/game/43/1.png",           
+            "/public/images/game/43/2.png"         
+                ],
+        "result": ["พลัดพราก"],
+        "time": 90,
+        "word": 2,
+        "bonus": 1.5
+    }, 
+    {
+        "id": 44,
+        "hint": [
+            "คำใบ้ที่ 1 ธอร์กำลังมองอะไร",
+            "คำใบ้ที่ 2 เป็นการเหลือบมอง "
+        ],
+        "picture": [
+            "/public/images/game/44/1.png"
+                ],
+        "result": ["มองค้อน"],
+        "time": 90,
+        "word": 2,
+        "bonus": 2
+    }, 
+    {
+        "id": 45,
+        "hint": [
+            "คำใบ้ที่ 1 ศาลยุติธรรม",
+            "คำใบ้ที่ 2 สารประกอบ ไฮเดรตเต็ดโพแทสเซียมอะลูมิเนียมซัลเฟต"
+        ],
+        "picture": [
+            "/public/images/game/45/1.png",
+            "/public/images/game/45/2.png"
+                ],
+        "result": ["สารส้ม"],
+        "time": 60,
+        "word": 2,
+        "bonus": 2
+    }, 
+    {
+        "id": 46,
+        "hint": [
+            "คำใบ้ที่ 1 อย่ามองแค่เส้นผม",
+            "คำใบ้ที่ 2 เรื่องง่าย ๆ แต่คิดไม่ออก"
+        ],
+        "picture": [
+            "/public/images/game/46/1.png"
+                ],
+        "result": ["เส้นผมบังภูเขา"],
+        "time": 90,
+        "word": 5,
+        "bonus": 2
+    }, 
+    {
+        "id": 47,
+        "hint": [
+            "คำใบ้ที่ 1 จำนวนหลักอะไรนะ?",
+            "คำใบ้ที่ 2 กองกำลังพิเศษ"
+        ],
+        "picture": [
+            "/public/images/game/47/1.png",
+            "/public/images/game/47/2.png"
+                ],
+        "result": ["หน่วยรบ"],
+        "time": 60,
+        "word": 2,
+        "bonus": 2
+    }, 
+    {
+        "id": 48,
+        "hint": [
+            "คำใบ้ที่ 1 คำผวน",
+            "คำใบ้ที่ 2 เป็นอาหารประเภทไส้กรอก"
+        ],
+        "picture": [
+            "/public/images/game/48/1.png",
+            "/public/images/game/48/2.png"
+                ],
+        "result": ["หมูยอ"],
+        "time": 90,
+        "word": 2,
+        "bonus": 2
+    }, 
+    {
+        "id": 49,
+        "hint": [
+            "คำใบ้ที่ 1 น้องของพ่อเรียกว่าอะไร",
+            "คำใบ้ที่ 2 อากำลังทำอะไร"
+        ],
+        "picture": [
+            "/public/images/game/49/1.png"
+                ],
+        "result": ["อาหรับ"],
+        "time": 60,
+        "word": 2,
+        "bonus": 1.5
+    }, 
+    {
+        "id": 50,
+        "hint": [
+            "คำใบ้ที่ 1 คำผวน",
+            "คำใบ้ที่ 2 อ๊อดพิม"
+        ],
+        "picture": [
+            "/public/images/game/50/1.png",
+            "/public/images/game/50/2.png"
+                ],
+        "result": ["อิมพอร์ต","อิมพอร์ท"],
+        "time": 90,
+        "word": 2,
+        "bonus": 2
+    }
+]

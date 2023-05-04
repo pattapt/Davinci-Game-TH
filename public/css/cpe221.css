@@ -48,8 +48,9 @@ p, a h1, h2, h3, h4, h5, h6, li, ul, span, small, button{
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 1058px;
-    height: 790px;
+    max-width: 1058px;
+    width: 95vw;
+    /* height: 790px; */
     z-index: 2;
     margin-top: 10%;
 }
@@ -326,6 +327,7 @@ footer p{
 
 
 .btYellowBig, .btBlueBig {
+    cursor: pointer;
     width: 194px;
     height: 42px;
     -webkit-border-radius: 34px;
@@ -455,12 +457,123 @@ footer p{
 }
 
 
+.setting {
+    min-width: 100%;
+    margin: 10px 0 15px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    justify-content: center;
+    margin: 20px 0 6px;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
 
 
+.selector{
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 15em;
+    max-width: 9em;
+    min-height: 9em;
+    justify-content: center;
+    margin: 0.5em;
+    position: relative;
+    border-radius: 5px;
+    box-shadow: 1px -1px 10px 0px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 1px -1px 10px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 1px -1px 10px 0px rgba(0,0,0,0.75);
+    cursor: pointer;
+}
 
+.selector.active{
+    border: 1px solid red;
+}
 
+.selector h2.mode-name{
+    font-size: 18px;
+    text-align: center;
+}
 
+.selector .img{
+    margin: 0.25em 1.5em 0.2em;
+    height: 5em;
+    text-align: center;
+}
 
+.selector .img .logo{
+    height: 100%;
+    width: auto;
+    border-radius: 10px;
+}
+
+.game-info{
+    display: flex;
+    justify-content: center;
+}
+
+.game-info .detail{
+    max-width: 500px;
+}
+
+.room-id{
+    text-align: center;
+    padding: 1rem;
+    background-color: #181818;
+    color: white;
+    border-radius: 10px;
+    max-width: 320px;
+}
+
+.room-id h2{
+
+}
+
+.game-info .playerlist{
+    max-width: 900px;
+    min-width: 90%;
+}
+
+.wating-screen{
+    margin: 0 auto;
+}
+
+.game-img{
+    display: flex;
+    flex-direction: column;
+    /* flex: 1 1 15em; */
+    /* max-width: 9em;
+    min-height: 9em; */
+    justify-content: center;
+    margin: 0.5em;
+    position: relative;
+    border-radius: 5px;
+    box-shadow: 1px -1px 10px 0px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 1px -1px 10px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 1px -1px 10px 0px rgba(0,0,0,0.75);
+    cursor: pointer;
+}
+.game-img .img{
+    padding: 0.2rem;
+}
+.game-img .logo{
+    width: 230px;
+    height: 230px;
+    object-fit: cover;
+}
+.game-info .hint {
+    max-width: 930px;
+    min-width: 90%;
+}
 
 
 @media only screen and (max-width: 767px) {

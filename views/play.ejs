@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!--required meta tags-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--meta-->
+    <link rel="icon" href="<%- main_site.favicon %>" type="image/png" sizes="16x16">
+    <title>เล่นเกม | <%- main_site.title %></title>
+    <meta name="description" content="<%- main_site.description %>">
+    <meta name="author" content="<%- main_site.author %>">
+
+    <!--twitter og-->
+    <meta name="twitter:site" content="@<%- main_site.author %>">
+    <meta name="twitter:creator" content="@<%- main_site.author %>">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<%- main_site.title %>">
+    <meta name="twitter:description" content="<%- main_site.description %>">
+    <meta name="twitter:image" content="#">
+
+    <!--facebook og-->
+    <meta property="og:url" content="#">
+    <meta name="twitter:title" content="<%- main_site.title %>">
+    <meta property="og:description" content="<%- main_site.description %>">
+    <meta property="og:image" content="#">
+    <meta property="og:image:secure_url" content="#">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="600">
+
+    <%- include('src/header') %>
+</head>
+
+<body class="davinci-game">
+    <div class="background"></div>
+    <%- include('src/navbar') %>
+    <div class="flex">
+        <header>
+            <div class="logo mt-2 mb-2">
+                <img src="/public/images/logo-v1.png" style="width: 200px">
+                <h3>JUST GUESS AND WIN</h3>
+            </div>
+        </header>
+        <div class="card play-card mx-auto">
+            <div class="title"><span class="gTitle"><h2>รอคนอื่นสักครู่!</h2></span></div>
+            <div class="content">
+                <div class="wating-screen">
+                    <lottie-player src="https://assets3.lottiefiles.com/packages/lf20_raiw2hpe.json"  background="transparent"  speed="1"  style="width: 300px; height: 300px;"  loop autoplay></lottie-player>
+                </div>
+                <div class="wating-screen">
+                    <lottie-player src="https://assets2.lottiefiles.com/private_files/lf30_khak9ubl.json"  background="transparent"  speed="1"  style="width: 300px; height: 300px;"  autoplay></lottie-player>
+                </div>
+                <div class="actions">
+                    <a href="/" class="btYellowBig ic-playHome"><strong>ออกจากห้อง</strong></a>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <p>Made by Ctrl C + Ctrl V in my computer</p>
+        </footer>
+    </div>
+    <%- include('src/script') %>
+    <script src="/public/js/play.js"></script>
+</body>
+
+</html>
