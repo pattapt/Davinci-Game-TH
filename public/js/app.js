@@ -1,8 +1,8 @@
 class KATIC_GAME{
     // SETTING
-    baseUrl = 'http://127.0.0.1'
-    // baseApiUrl = 'http://cpe221.patta.dev/api-gateway'
-    baseApiUrl = 'http://127.0.0.1/api-gateway'
+    baseUrl = 'http://cpe221.patta.dev/'
+    baseApiUrl = 'http://cpe221.patta.dev/api-gateway'
+    // baseApiUrl = 'http://127.0.0.1/api-gateway'
     SocketURL = 'ws://127.0.0.1'
 
 
