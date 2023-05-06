@@ -1,9 +1,10 @@
 class KATIC_GAME{
     // SETTING
-    baseUrl = 'http://cpe221.patta.dev/'
-    baseApiUrl = 'http://cpe221.patta.dev/api-gateway'
-    // baseApiUrl = 'http://127.0.0.1/api-gateway'
-    SocketURL = 'ws://127.0.0.1'
+    Host = location.hostname
+    Proto = location.protocol
+    baseUrl = `${this.Proto}//${this.Host}`
+    baseApiUrl = `${this.Proto}//${this.Host}/api-gateway`
+    SocketURL = `${this.Proto == "http:" ? "ws" : "wss"}://${this.Host}`
 
 
     // GENERAL FUNCTION
