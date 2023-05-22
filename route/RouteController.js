@@ -51,7 +51,8 @@ const CreateRoom = (Req, Res, next) => {
         "players": [],
         "game_status": "free-play", // free-play - answer
         "win": [],
-        "start": ""
+        "start": "",
+        "countdown": []
     }
 
     console.log(channels[GameToken])
@@ -111,7 +112,7 @@ const StartGame = (Req, Res, next) => {
     const GameToken = Req.body.game_id
     const foundGame = Object.values(channels).find(game => game.token === GameToken);
 
-    if(channels[GameToken].players.length < 0){
+    if(channels[GameToken].players.length < 2){
         Res.json(
             {
                 "status_code": 400,
@@ -211,6 +212,35 @@ const StartGame = (Req, Res, next) => {
                     }
                     
                 }, selected[CurrentRound].time * 1000);
+                channels[GameToken].countdown.forEach(TimeoutList => {
+                    clearTimeout(TimeoutList)
+                })
+                const Cd = [30, 15, 10, 5, 4, 3, 2, 1]
+                Cd.forEach(TimeCOuntdown => {
+                    // Countdown Zone
+                    channels[GameToken].countdown.push(setTimeout(() => {
+                        // 5 วินาทีสุดท้าย
+                        const ChatDataOther = {
+                            type: "Countdown",
+                            second: TimeCOuntdown,
+                            data: {
+                                message: `เหลือเวลา ${TimeCOuntdown} วินาที!`
+                            }
+                        }
+                        if(channels[GameToken].players && channels[GameToken].players !== undefined){
+                            channels[GameToken].players.forEach(function each(client) {
+                            if (client.socket.readyState === WebSocket.OPEN) {
+                                client.socket.send(JSON.stringify(ChatDataOther));
+                            }
+                            });
+                        }
+                        if(channels[GameToken].host && channels[GameToken].host !== undefined){
+                            channels[GameToken].host.socket.send(JSON.stringify(ChatDataOther));
+                        }
+                    }, (selected[CurrentRound].time - TimeCOuntdown) * 1000))
+                });
+
+                
             }
         }, 5000);
         // ส่งหา Client ว่าเตรียมตัว และนับถอยหลัง
@@ -364,6 +394,35 @@ const ContinueGame = (Req, Res, next) => {
                     }
                     
                 }, channels[GameToken].list[CurrentRound].time * 1000);
+
+                channels[GameToken].countdown.forEach(TimeoutList => {
+                    clearTimeout(TimeoutList)
+                })
+
+                const Cd = [30, 15, 10, 5, 4, 3, 2, 1]
+                Cd.forEach(TimeCOuntdown => {
+                    // Countdown Zone
+                    channels[GameToken].countdown.push(setTimeout(() => {
+                        // 5 วินาทีสุดท้าย
+                        const ChatDataOther = {
+                            type: "Countdown",
+                            second: TimeCOuntdown,
+                            data: {
+                                message: `เหลือเวลา ${TimeCOuntdown} วินาที!`
+                            }
+                        }
+                        if(channels[GameToken].players && channels[GameToken].players !== undefined){
+                            channels[GameToken].players.forEach(function each(client) {
+                            if (client.socket.readyState === WebSocket.OPEN) {
+                                client.socket.send(JSON.stringify(ChatDataOther));
+                            }
+                            });
+                        }
+                        if(channels[GameToken].host && channels[GameToken].host !== undefined){
+                            channels[GameToken].host.socket.send(JSON.stringify(ChatDataOther));
+                        }
+                    }, (channels[GameToken].list[CurrentRound].time - TimeCOuntdown) * 1000))
+                });
             }
         }, 5000);
         // ส่งหา Client ว่าเตรียมตัว และนับถอยหลัง
@@ -571,6 +630,9 @@ const AnswerGame = (Req, Res, next) => {
                     if(!CheckAllRes && channels[GameToken] && channels[GameToken] !== undefined){
 
                         clearTimeout(channels[GameToken].game)
+                        channels[GameToken].countdown.forEach(TimeoutList => {
+                            clearTimeout(TimeoutList)
+                        })
 
                         let Game = _.cloneDeep(channels[GameToken]);
                         if(Game.host !== undefined){

@@ -149,6 +149,20 @@ class HostApp{
             Host.WinSound.play()
         }
 
+        if(data.type && data.type !== undefined && data.type == "Countdown"){
+            ChatData.append($(`
+            <div class="chat-win">
+                <div class="message">
+                    <div class="chat-content">
+                        <p>${data.data.message}</p>
+                    </div>
+                </div>
+            </div>
+            `))
+            Host.ScrollDown()
+            Host.ChatPop.play()
+        }
+
 
         if(data.status && data.status !== undefined && data.status == "room_end"){
             $(".EndGame").removeClass("d-none")

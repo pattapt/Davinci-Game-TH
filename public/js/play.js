@@ -82,6 +82,20 @@ class PlayApp{
             Play.WinSound.play()
         }
 
+        if(data.type && data.type !== undefined && data.type == "Countdown"){
+            ChatData.append($(`
+            <div class="chat-win">
+                <div class="message">
+                    <div class="chat-content">
+                        <p>${data.data.message}</p>
+                    </div>
+                </div>
+            </div>
+            `))
+            Play.ScrollDown()
+            Play.ChatPop.play()
+        }
+
     }
     
 
