@@ -80,7 +80,7 @@ wss.on('connection', function connection(ws, req) {
         "room_id": Math.floor(Math.random() * 1000000).toString().padStart(6, '0'),
         "mode": "normal",
         "time": 60,
-        "max_round": 10,
+        "max_round": 2,
         "current_round": 0,
         "max_player": 30,
         "game_status": "free-play", // free-play - playing
@@ -215,5 +215,5 @@ app.use((err, req, res, next) => {
   res.status(500).render('error_docs/500')
 })
 server.listen(80, ()=>{
-    console.log("Started HorHub Server")
+    console.log("Started Server on 127.0.0.1:80")
 })

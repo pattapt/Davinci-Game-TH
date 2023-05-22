@@ -45,6 +45,7 @@ const CreateRoom = (Req, Res, next) => {
         "mode": GameType,
         "time": GameTime,
         "max_round": GameRound,
+        // "max_round": 2,
         "current_round": 0,
         "max_player": GameMaxPlayer,
         "players": [],
@@ -110,7 +111,7 @@ const StartGame = (Req, Res, next) => {
     const GameToken = Req.body.game_id
     const foundGame = Object.values(channels).find(game => game.token === GameToken);
 
-    if(channels[GameToken].players.length < 2){
+    if(channels[GameToken].players.length < 0){
         Res.json(
             {
                 "status_code": 400,
@@ -179,16 +180,31 @@ const StartGame = (Req, Res, next) => {
                         if(Game.game){
                           delete Game.game
                         }
-                        if(channels[GameToken].host && channels[GameToken].host !== undefined){
-                            channels[GameToken].host.socket.send(JSON.stringify({status: "round_time_out", round: CurrentRound, max_time: selected[CurrentRound].time, room_info: Game}));
-                        }
-                        if(channels[GameToken].players && channels[GameToken].players !== undefined){
-                            delete Game.list
-                            channels[GameToken].players.forEach(function each(client) {
-                                if (client.socket.readyState === WebSocket.OPEN) {
-                                  client.socket.send(JSON.stringify({status: "round_time_out", round: CurrentRound, max_time: selected[CurrentRound].time, room_info: Game}));
-                                }
-                            });
+                        if(channels[GameToken].current_round + 1 == channels[GameToken].max_round){
+                            // จบเกมแล้ว เข้าหน้าสรุปผล
+                            if(channels[GameToken].host && channels[GameToken].host !== undefined){
+                                channels[GameToken].host.socket.send(JSON.stringify({status: "room_end", round: CurrentRound, max_time: selected[CurrentRound].time, room_info: Game}));
+                            }
+                            if(channels[GameToken].players && channels[GameToken].players !== undefined){
+                                delete Game.list
+                                channels[GameToken].players.forEach(function each(client) {
+                                    if (client.socket.readyState === WebSocket.OPEN) {
+                                      client.socket.send(JSON.stringify({status: "room_end", round: CurrentRound, max_time: selected[CurrentRound].time, room_info: Game}));
+                                    }
+                                });
+                            }
+                        }else{
+                            if(channels[GameToken].host && channels[GameToken].host !== undefined){
+                                channels[GameToken].host.socket.send(JSON.stringify({status: "round_time_out", round: CurrentRound, max_time: selected[CurrentRound].time, room_info: Game}));
+                            }
+                            if(channels[GameToken].players && channels[GameToken].players !== undefined){
+                                delete Game.list
+                                channels[GameToken].players.forEach(function each(client) {
+                                    if (client.socket.readyState === WebSocket.OPEN) {
+                                      client.socket.send(JSON.stringify({status: "round_time_out", round: CurrentRound, max_time: selected[CurrentRound].time, room_info: Game}));
+                                    }
+                                });
+                            }
                         }
                         channels[GameToken].game_status = "free-play"
                         
@@ -253,12 +269,25 @@ const ContinueGame = (Req, Res, next) => {
 
     if(foundGame){
         if(channels[GameToken].current_round + 1 == channels[GameToken].max_round){
+            let Game = _.cloneDeep(channels[GameToken]);
+            if(Game.host !== undefined){
+              delete Game.host.socket
+            }
+            Game.players = Game.players.map(player => {
+              delete player.socket
+              return player;
+            });
+            if(Game.game){
+              delete Game.game
+            }
             Res.json(
                 {
                     "status_code": 400,
                     "data": "end game",
+                    "room": Game
                 }
             )
+            return
         }
         const CurrentRound = channels[GameToken].current_round + 1
         channels[GameToken].current_round++
@@ -303,17 +332,33 @@ const ContinueGame = (Req, Res, next) => {
                         if(Game.game){
                           delete Game.game
                         }
-                        if(channels[GameToken].host && channels[GameToken].host !== undefined){
-                            channels[GameToken].host.socket.send(JSON.stringify({status: "round_time_out", round: CurrentRound, max_time: channels[GameToken].list[CurrentRound].time, room_info: Game}));
+                        if(channels[GameToken].current_round + 1 == channels[GameToken].max_round){
+                            // จบเกมแล้ว เข้าหน้าสรุปผล
+                            if(channels[GameToken].host && channels[GameToken].host !== undefined){
+                                channels[GameToken].host.socket.send(JSON.stringify({status: "room_end", round: CurrentRound, max_time: channels[GameToken].list[CurrentRound].time, room_info: Game}));
+                            }
+                            if(channels[GameToken].players && channels[GameToken].players !== undefined){
+                                delete Game.list
+                                channels[GameToken].players.forEach(function each(client) {
+                                    if (client.socket.readyState === WebSocket.OPEN) {
+                                      client.socket.send(JSON.stringify({status: "room_end", round: CurrentRound, max_time: channels[GameToken].list[CurrentRound].time, room_info: Game}));
+                                    }
+                                });
+                            }
+                        }else{
+                            if(channels[GameToken].host && channels[GameToken].host !== undefined){
+                                channels[GameToken].host.socket.send(JSON.stringify({status: "round_time_out", round: CurrentRound, max_time: channels[GameToken].list[CurrentRound].time, room_info: Game}));
+                            }
+                            if(channels[GameToken].players && channels[GameToken].players !== undefined){
+                                delete Game.list
+                                channels[GameToken].players.forEach(function each(client) {
+                                    if (client.socket.readyState === WebSocket.OPEN) {
+                                      client.socket.send(JSON.stringify({status: "round_time_out", round: CurrentRound, max_time: channels[GameToken].list[CurrentRound].time, room_info: Game}));
+                                    }
+                                });
+                            }
                         }
-                        if(channels[GameToken].players && channels[GameToken].players !== undefined){
-                            delete Game.list
-                            channels[GameToken].players.forEach(function each(client) {
-                                if (client.socket.readyState === WebSocket.OPEN) {
-                                  client.socket.send(JSON.stringify({status: "round_time_out", round: CurrentRound, max_time: channels[GameToken].list[CurrentRound].time, room_info: Game}));
-                                }
-                            });
-                        }
+                        
                         channels[GameToken].game_status = "free-play"
                         
                     }
@@ -538,18 +583,35 @@ const AnswerGame = (Req, Res, next) => {
                         if(Game.game){
                           delete Game.game
                         }
-                        const CurrentRound = channels[GameToken].current_round
-                        if(channels[GameToken].host && channels[GameToken].host !== undefined){
-                            channels[GameToken].host.socket.send(JSON.stringify({status: "round_time_out", round: CurrentRound, max_time: channels[GameToken].list[CurrentRound].time, room_info: Game}));
+                        if(channels[GameToken].current_round + 1 == channels[GameToken].max_round){
+                            // จบเกมแล้ว เข้าหน้าสรุปผล
+                            const CurrentRound = channels[GameToken].current_round
+                            if(channels[GameToken].host && channels[GameToken].host !== undefined){
+                                channels[GameToken].host.socket.send(JSON.stringify({status: "room_end", round: CurrentRound, max_time: channels[GameToken].list[CurrentRound].time, room_info: Game}));
+                            }
+                            if(channels[GameToken].players && channels[GameToken].players !== undefined){
+                                delete Game.list
+                                channels[GameToken].players.forEach(function each(client) {
+                                    if (client.socket.readyState === WebSocket.OPEN) {
+                                    client.socket.send(JSON.stringify({status: "room_end", round: CurrentRound, max_time: channels[GameToken].list[CurrentRound].time, room_info: Game}));
+                                    }
+                                });
+                            }
+                        }else{
+                            const CurrentRound = channels[GameToken].current_round
+                            if(channels[GameToken].host && channels[GameToken].host !== undefined){
+                                channels[GameToken].host.socket.send(JSON.stringify({status: "round_time_out", round: CurrentRound, max_time: channels[GameToken].list[CurrentRound].time, room_info: Game}));
+                            }
+                            if(channels[GameToken].players && channels[GameToken].players !== undefined){
+                                delete Game.list
+                                channels[GameToken].players.forEach(function each(client) {
+                                    if (client.socket.readyState === WebSocket.OPEN) {
+                                      client.socket.send(JSON.stringify({status: "round_time_out", round: CurrentRound, max_time: channels[GameToken].list[CurrentRound].time, room_info: Game}));
+                                    }
+                                });
+                            }
                         }
-                        if(channels[GameToken].players && channels[GameToken].players !== undefined){
-                            delete Game.list
-                            channels[GameToken].players.forEach(function each(client) {
-                                if (client.socket.readyState === WebSocket.OPEN) {
-                                  client.socket.send(JSON.stringify({status: "round_time_out", round: CurrentRound, max_time: channels[GameToken].list[CurrentRound].time, room_info: Game}));
-                                }
-                            });
-                        }
+                        
                         channels[GameToken].game_status = "free-play"
                         
                     }

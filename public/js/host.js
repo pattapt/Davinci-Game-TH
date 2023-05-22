@@ -4,9 +4,13 @@ class HostApp{
     _OldSiteTitle = ""
     _LoopDelayCount = 0
     _HintData = []
+    _CurrentAnswer = ""
 
 
     SocketManager(data){
+        const ChatData = $('.dataChat .chat-list')
+
+
         if(data.room_id && data.room_id !== undefined){
             document.getElementById("RoomID").innerText = data.room_id
         }
@@ -14,15 +18,38 @@ class HostApp{
         if(data.new_player && data.new_player !== undefined){
             const PlayerList = $(".playerlist .row")
             PlayerList.prepend($(`
-            <div class="col-md-3" data-player-id="${data.new_player.id}" data-player-token="${data.new_player.token}">
-                <p>${data.new_player.name}</p>
+                <div class="col-md-3" data-player-id="${data.new_player.id}" data-player-token="${data.new_player.token}" data-player-name="${data.new_player.name}">
+                    <p>${data.new_player.name}</p>
+                </div>
+            `))
+            ChatData.append($(`
+            <div class="chat-win">
+                <div class="message">
+                    <div class="chat-content" data-sender-id="host">
+                        <p>${data.new_player.name} เข้าร่วมเกม</p>
+                    </div>
+                </div>
             </div>
-        `))
+            `))
+            Host.ScrollDown()
         }
 
         if(data.leave_player && data.leave_player !== undefined){
             const PlayerID = data.leave_player.id
-            $(`.row .col-md-3[data-player-id="${PlayerID}"]`).remove()
+            const Leave = $(`.row .col-md-3[data-player-id="${PlayerID}"]`)
+            const PlayerName = Leave.attr("data-player-name")
+            Leave.remove()
+
+            ChatData.append($(`
+            <div class="chat-leave">
+                <div class="message">
+                    <div class="chat-content" data-sender-id="host">
+                        <p>${PlayerName} ออกจากเกม</p>
+                    </div>
+                </div>
+            </div>
+            `))
+            Host.ScrollDown()
         }
 
         if(data.status && data.status !== undefined && data.status == "start_game"){
@@ -41,6 +68,7 @@ class HostApp{
                     </div>
                     `))
                 });
+                Host._CurrentAnswer = data.game.result[0]
                 document.getElementById("TotalWords").innerText = GameData.word
                 document.getElementById("GameTitleRound").innerText = `รอบที่ ${data.round + 1} (Bonus X${GameData.bonus})`
                 let LoopRound = 1;
@@ -87,6 +115,91 @@ class HostApp{
                     })
                 }
             }
+            document.getElementById("answer").innerText = Host._CurrentAnswer
+        }
+
+        
+        if(data.type && data.type !== undefined && data.type == "messageSend"){
+            ChatData.append($(`
+            <div class="chat-right">
+                <div class="message">
+                    <div class="chat-content" data-sender-id="${data.sender}">
+                        <p>${data.data.message}</p>
+                    </div>
+                    <p class="chat-time mb-0 received"><small>${data.sender_name} | ${data.time}</small></p>
+                </div>
+            </div>
+            `))
+            Host.ScrollDown()
+        }
+
+        if(data.type && data.type !== undefined && data.type == "messageRecieve"){
+            ChatData.append($(`
+            <div class="chat-left">
+                <div class="message">
+                    <div class="chat-content" data-sender-id="${data.sender}">
+                        <p>${data.data.message}</p>
+                    </div>
+                    <p class="chat-time mb-0 received"><small>${data.sender_name} | ${data.time}</small></p>
+                </div>
+            </div>
+            `))
+            Host.ScrollDown()
+        }
+
+        if(data.type && data.type !== undefined && data.type == "playerWin"){
+            ChatData.append($(`
+            <div class="chat-win">
+                <div class="message">
+                    <div class="chat-content" data-sender-id="${data.sender}">
+                        <p>${data.data.message}</p>
+                    </div>
+                </div>
+            </div>
+            `))
+            Host.ScrollDown()
+        }
+
+
+        if(data.status && data.status !== undefined && data.status == "room_end"){
+            $(".EndGame").removeClass("d-none")
+            $(".game-screen").addClass("d-none")
+            document.getElementById("GameTitleRound").innerText = `จบเกม!`
+            if(data.room_info && data.room_info !== undefined){
+                const RoomData = data.room_info
+                document.querySelectorAll('.score ul li').forEach(e => e.remove());
+                if(RoomData.list && RoomData.players.length !== 0){
+                    const PlayerScore = RoomData.players
+                    PlayerScore.sort((a, b) => a.score - b.score);
+                    const Scoreboard = $(".score ul")
+                    let i = 1;
+                    PlayerScore.forEach(playerData => {
+                        let Award = "";
+                        if(i == PlayerScore.length){
+                            Award = "🏆"
+                        }
+                        Scoreboard.prepend($(`
+                        <li>
+                            <div class="item">
+                                <h3 class="username">${Award}${playerData.name}</h3>
+                                <p class="point">${KTApp.NumberFormatWithCommaV2(playerData.score)} Point</p>
+                            </div>
+                        </li>
+                        `))
+                        i++
+                    })
+                }
+            }
+        }
+    }
+
+
+    ScrollDown(){
+        const chatContainer = document.querySelector('.content.chat .dataChat');
+        const ElementHeight = (chatContainer.offsetHeight * 0.4) + chatContainer.offsetHeight;
+
+        if(chatContainer.scrollHeight - chatContainer.scrollTop < ElementHeight){
+            chatContainer.scrollTop = chatContainer.scrollHeight
         }
     }
 

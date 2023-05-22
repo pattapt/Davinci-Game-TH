@@ -36,84 +36,114 @@
 <body class="davinci-game">
     <div class="background"></div>
     <%- include('src/navbar') %>
-    <div class="flex">
+    <div class="flex in-game">
         <header>
             <div class="logo mt-2 mb-2">
                 <img src="/public/images/logo-v1.png" style="width: 200px">
                 <h3>JUST GUESS AND WIN</h3>
             </div>
         </header>
-        <div class="card play-card mx-auto waiting-card">
-            <div class="title"><span class="gTitle"><h2>เปิดตี๊เลย!</h2></span></div>
-            <div class="content">
-                <div class="setting">
-                    <div class="selector" data-type="normal">
-                        <div class="img">
-                            <img src="/public/images/setting.png" class="logo">
-                        </div>
-                        <h2 class="mode-name">โหมดปกติ</h2>
-                    </div>
-                    <div class="selector" data-type="normal">
-                        <div class="img">
-                            <img src="/public/images/setting.png" class="logo">
-                        </div>
-                        <h2 class="mode-name">โหมดแข่งขัน</h2>
-                    </div>
-                    <div class="selector" data-type="normal">
-                        <div class="img">
-                            <img src="/public/images/setting.png" class="logo">
-                        </div>
-                        <h2 class="mode-name">โหมดอะไรไม่รู้</h2>
-                    </div>
-                </div>
-                <div class="game-info">
-                    <div class="detail">
-                        <div class="room-id mx-auto">
-                            <h2 class="mb-0">ไอดีห้อง : <span id="RoomID"></span></h2>
-                        </div>
-                        <p class="m-2">ในโหมดปกติผู้เล่นจะได้รับคำถาม 10 ข้อ และในแต่ละช้อจะต้องตอบให้ได้ในเวลา 1 นาที ผู้เล่นที่ตอบได้คะแนนคนแรกจะได้คะแนนมากที่สุด และลดไปตามลำดับที่ตอบถูกและเวลา หากหมดเวลาแล้วยังไม่สามารถตอบได้จะได้คะแนนเป็น 0 คะแนน</p>
-                    </div>
-                </div>
-                <div class="actions">
-                    <button class="btBlueBig ic-rooms StartNow"><strong>เริ่มเกมเลย!</strong></button>
-                </div>
-                <div class="game-info">
-                    <div class="playerlist">
-                        <div class="row"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <div class="card play-card mx-auto game-card d-none">
-            <div class="title"><span class="gTitle"><h2 id="GameTitleRound">กำลังเริ่มเกม!!</h2></span></div>
-            <div class="content countdown">
-                <div class="wating-screen">
-                    <lottie-player src="https://assets2.lottiefiles.com/private_files/lf30_khak9ubl.json" class="LoadingPlayer"  background="transparent"  speed="1"  style="width: 300px; height: 300px;"  autoplay></lottie-player>
-                </div>
-            </div>
-            <div class="content game-screen d-none">
-                <div class="setting game-screen-img"></div>
-                <div class="game-info">
-                    <div class="hint">
-                        <div class="room-id mx-auto">
-                            <h2 class="mb-0"><span id="TotalWords">0</span> พยางค์</h2>
+        <div class="row">
+            <div class="col-md-9">
+                <div class="card play-card mx-auto waiting-card">
+                    <div class="title"><span class="gTitle"><h2>เปิดตี๊เลย!</h2></span></div>
+                    <div class="content">
+                        <div class="setting">
+                            <div class="selector" data-type="normal">
+                                <div class="img">
+                                    <img src="/public/images/setting.png" class="logo">
+                                </div>
+                                <h2 class="mode-name">โหมดปกติ</h2>
+                            </div>
+                            <div class="selector" data-type="normal">
+                                <div class="img">
+                                    <img src="/public/images/setting.png" class="logo">
+                                </div>
+                                <h2 class="mode-name">โหมดแข่งขัน</h2>
+                            </div>
+                            <div class="selector" data-type="normal">
+                                <div class="img">
+                                    <img src="/public/images/setting.png" class="logo">
+                                </div>
+                                <h2 class="mode-name">โหมดอะไรไม่รู้</h2>
+                            </div>
                         </div>
-                        <div class="row mt-3 mb-4 HintData"></div>
+                        <div class="game-info">
+                            <div class="detail">
+                                <div class="room-id mx-auto">
+                                    <h2 class="mb-0">ไอดีห้อง : <span id="RoomID"></span></h2>
+                                </div>
+                                <p class="m-2">ในโหมดปกติผู้เล่นจะได้รับคำถาม 10 ข้อ และในแต่ละช้อจะต้องตอบให้ได้ในเวลา 1 นาที ผู้เล่นที่ตอบได้คะแนนคนแรกจะได้คะแนนมากที่สุด และลดไปตามลำดับที่ตอบถูกและเวลา หากหมดเวลาแล้วยังไม่สามารถตอบได้จะได้คะแนนเป็น 0 คะแนน</p>
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <button class="btBlueBig ic-rooms StartNow"><strong>เริ่มเกมเลย!</strong></button>
+                        </div>
+                        <div class="game-info">
+                            <div class="playerlist">
+                                <div class="row"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card play-card mx-auto game-card d-none">
+                    <div class="title"><span class="gTitle"><h2 id="GameTitleRound">กำลังเริ่มเกม!!</h2></span></div>
+                    <div class="content countdown">
+                        <div class="wating-screen">
+                            <lottie-player src="https://assets2.lottiefiles.com/private_files/lf30_khak9ubl.json" class="LoadingPlayer"  background="transparent"  speed="1"  style="width: 300px; height: 300px;"  autoplay></lottie-player>
+                        </div>
+                    </div>
+                    <div class="content game-screen d-none">
+                        <div class="setting game-screen-img"></div>
+                        <div class="game-info">
+                            <div class="hint">
+                                <div class="room-id mx-auto">
+                                    <h2 class="mb-0"><span id="TotalWords">0</span> พยางค์</h2>
+                                </div>
+                                <div class="row mt-3 mb-4 HintData"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content SummaryScore d-none">
+                        <div class="room-id mx-auto mb-2">
+                            <h2 class="mb-0">เฉลย <span id="answer"></span></h2>
+                        </div>
+                        <div class="score">
+                            <ul></ul>
+                        </div>
+                        <div class="actions">
+                            <button class="btBlueBig ic-rooms StartNow"><strong>จบเกมตอนนี้!</strong></button>
+                            <button class="btYellowBig ic-rooms ContinueGame"><strong>เล่นต่อเลย!</strong></button>
+                        </div>
+                    </div>
+
+                    <div class="content EndGame d-none">
+                        <div class="score">
+                            <ul></ul>
+                        </div>
+                        <div class="actions">
+                            <a class="btYellowBig ic-rooms" href="/"><strong>ออกจากเกม!</strong></a>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="content SummaryScore d-none">
-                <div class="score">
-                    <ul></ul>
-                </div>
-                <div class="actions">
-                    <button class="btBlueBig ic-rooms StartNow"><strong>จบเกมตอนนี้!</strong></button>
-                    <button class="btYellowBig ic-rooms ContinueGame"><strong>เล่นต่อเลย!</strong></button>
+            <div class="col-md-3">
+                <div class="card play-card mx-auto host-chat-card">
+                    <div class="title"><span class="gTitle"><h2>แชท!</h2></span></div>
+                    <div class="content chat">
+                        <div class="dataChat host">
+                            <div class="chat-list"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <footer>
+        
+
+
+        <footer class="mt-4">
             <p>Made by Ctrl C + Ctrl V in my computer</p>
         </footer>
     </div>

@@ -12,6 +12,7 @@ class PlayApp{
 
         if(data.you && data.you !== undefined && data.you !== ""){
             Play._PlayerToken = data.you.token
+            Play._GameCurrentRound = data.current_round
         }
         if(data.status && data.status !== undefined && data.status == "start_round"){
             Play._GameCurrentRound = data.round
