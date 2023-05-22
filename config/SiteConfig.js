@@ -7,9 +7,6 @@ const Config = {
         "keywords": "Davinci, Gane",
         "author": "ppatta, Pok",
         "favicon": "/public/homepage/img/favicon.png?v=1.00",
-    },
-    "keys": {
-        "recaptcha": process.env.RECAPTCHA_SITE_KEY,
     }
 }
 module.exports = Config

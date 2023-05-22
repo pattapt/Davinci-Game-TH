@@ -5,7 +5,8 @@ class HostApp{
     _LoopDelayCount = 0
     _HintData = []
     _CurrentAnswer = ""
-
+    WinSound = new Audio('/public/sound/win-sound.mp3')
+    ChatPop = new Audio('/public/sound/chat-pop.mp3')
 
     SocketManager(data){
         const ChatData = $('.dataChat .chat-list')
@@ -118,20 +119,6 @@ class HostApp{
             document.getElementById("answer").innerText = Host._CurrentAnswer
         }
 
-        
-        if(data.type && data.type !== undefined && data.type == "messageSend"){
-            ChatData.append($(`
-            <div class="chat-right">
-                <div class="message">
-                    <div class="chat-content" data-sender-id="${data.sender}">
-                        <p>${data.data.message}</p>
-                    </div>
-                    <p class="chat-time mb-0 received"><small>${data.sender_name} | ${data.time}</small></p>
-                </div>
-            </div>
-            `))
-            Host.ScrollDown()
-        }
 
         if(data.type && data.type !== undefined && data.type == "messageRecieve"){
             ChatData.append($(`
@@ -145,6 +132,7 @@ class HostApp{
             </div>
             `))
             Host.ScrollDown()
+            Host.ChatPop.play()
         }
 
         if(data.type && data.type !== undefined && data.type == "playerWin"){
@@ -158,6 +146,7 @@ class HostApp{
             </div>
             `))
             Host.ScrollDown()
+            Host.WinSound.play()
         }
 
 
@@ -327,5 +316,7 @@ $( document ).ready(function() {
 
     $(".StartNow").on('click', Host.StartGame)
     $(".ContinueGame").on('click', Host.ContinueGame)
-
+    setTimeout(() => {
+        document.getElementsByClassName("bg-music")[0].play()
+    }, 3000);
 })

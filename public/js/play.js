@@ -7,6 +7,9 @@ class PlayApp{
     _PlayerToken = ""
     _GameCurrentRound = 0
 
+    WinSound = new Audio('/public/sound/win-sound.mp3')
+    ChatPop = new Audio('/public/sound/chat-pop.mp3')
+
     WebSocketController(data){
         const ChatData = $('.dataChat .chat-list')
 
@@ -62,6 +65,7 @@ class PlayApp{
             </div>
             `))
             Play.ScrollDown()
+            Play.ChatPop.play()
         }
 
         if(data.type && data.type !== undefined && data.type == "playerWin"){
@@ -75,6 +79,7 @@ class PlayApp{
             </div>
             `))
             Play.ScrollDown()
+            Play.WinSound.play()
         }
 
     }

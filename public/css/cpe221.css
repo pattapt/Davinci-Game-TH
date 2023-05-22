@@ -704,3 +704,9 @@ footer p{
 .host-chat-card{
     height: 100% !important;
 }
+
+.bg-music {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
